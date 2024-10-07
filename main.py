@@ -244,7 +244,7 @@ def main():
         portfolio_risk = calculate_portfolio_risk(weights, asset_A.std_deviation, asset_B.std_deviation, correlation_coef)
         print("The risk of the portfolio is:", portfolio_risk)
 
-    except Exception as e:
+    except exception as e:
         print(e)
         print(traceback.print_exc())
 
