@@ -93,7 +93,7 @@ def input_probabilities():
 
 
 
-def input_expected_returns():
+def input_expected_returns(): # gets input expected returns fron uyser to calculate the expected return
     """
     Takes input from the user to create an array of expected returns.
 
@@ -244,7 +244,7 @@ def main():
         portfolio_risk = calculate_portfolio_risk(weights, asset_A.std_deviation, asset_B.std_deviation, correlation_coef)
         print("The risk of the portfolio is:", portfolio_risk)
 
-    except exception as e:
+    except Exception as e:
         print(e)
         print(traceback.print_exc())
 
