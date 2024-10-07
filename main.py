@@ -62,8 +62,9 @@ def calculate_optimal_portfolio(asset_A, asset_B, t_bills):
 
 
 def calculate_cal_slope(optimal_return, optimal_std_dev, t_bill_return):
+    cal_slope = (optimal_return - t_bill_return) / optimal_std_dev
+    print("optimal_return: ", optimal_return, "optimal_std_dev: ", optimal_std_dev, "t_bill_return: ", t_bill_return, "\ncal_slope: ", cal_slope)
     return (optimal_return - t_bill_return) / optimal_std_dev
-
 
 
 ## gets input probabilites fron uyser to calculate the expected return
@@ -119,8 +120,42 @@ def expected_return_finance(probabilities, returns):
     if not (0.99 <= sum(probabilities) <= 1.01):
         raise ValueError("The sum of the probabilities must be approximately 1.")
 
+    # Calculate the expected return
+    expected_return = sum([prob * ret for prob, ret in zip(probabilities, returns)])
+    print("probabilities: ", probabilities, "returns: ", returns)
+    print("expected return: ", expected_return)
     return sum([prob * ret for prob, ret in zip(probabilities, returns)])
 
+
+# Calculate the expected return of a portfolio with given weights and returns of assets
+def calculate_portfolio_return(weights, asset_A_return, asset_B_return):
+    print("weights: ", weights, "asset_A_return: ", asset_A_return, "asset_B_return: ", asset_B_return)
+    portfolio_return = weights * asset_A_return + (1 - weights) * asset_B_return
+    print("portfolio return = ", portfolio_return)
+    return weights * asset_A_return + (1 - weights) * asset_B_return
+
+# Calculate the standard deviation of a portfolio with given weights and standard deviations of assets
+def calculate_portfolio_risk(weights, asset_A_STD, asset_B_STD, correlation):
+    #return (weights ** 2 * stocks_std_dev ** 2 + (1 - weights) ** 2 * gold_std_dev ** 2 + 2 * weights * (1 - weights) * stocks_std_dev * gold_std_dev * correlation) ** 0
+    return np.sqrt(
+        (weights ** 2 * asset_A_STD ** 2) +
+        ((1 - weights) ** 2 * asset_B_STD ** 2) +
+        (2 * weights * (1 - weights) * asset_A_STD * asset_B_STD * correlation)
+    )
+
+# Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets
+def calculate_standard_deviation(probabilities, returns):
+    # Step 1: Calculate the expected return (mean)
+    expected_return = sum(p * r for p, r in zip(probabilities, returns))
+
+    # Step 2: Calculate the variance
+    variance = sum(p * (r - expected_return) ** 2 for p, r in zip(probabilities, returns))
+
+    # Step 3: Calculate the standard deviation
+    standard_deviation = np.sqrt(variance)
+    print("expected_return: ", expected_return, "standard_deviation: ", standard_deviation, "variance: ", variance)
+
+    return expected_return, standard_deviation
 
 
 
@@ -149,7 +184,7 @@ def main():
 
     # Calculate the optimal portfolio weights for assets A and B
     print("\nEnter the correlation coefeciant for the funds s:")
-    global correlation_coef
+    global correlation_coef, user_expected_returns, user_probabilities
     global covariance_AB
     correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
     covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
@@ -186,6 +221,42 @@ def main():
     except ValueError as e:
         print(e)
         print(traceback.print_exc())
+
+
+    # Calculate the expected return of a portfolio with given weights and returns of assets
+    try:
+        print("Enter the weights for the portfolio")
+        weights = float(input("Enter the weight for the stocks (as decimal, e.g., 0.6 for 60%): "))
+        stocks_return = float(input("Enter the expected return for stocks: [Enter 0 to use Asset A's expected return] "))
+
+        if stocks_return == 0:
+            stocks_return = asset_A.expected_return
+            print("The expected return for stocks is set to the expected return of Asset A.", stocks_return)
+        gold_return = float(input("Enter the expected return for gold: [enter 0 to use Asset B's expected return] "))
+        if gold_return == 0:
+            gold_return = asset_B.expected_return
+            print("The expected return for gold is set to the expected return of Asset B.", gold_return)
+
+        print("calculating the portfolio return using the weights and expected returns for 2 asset classes\n", "asset_a return: ", stocks_return, "asset_2 return: ", gold_return, "weights: ", weights)
+        portfolio_return = calculate_portfolio_return(weights, stocks_return, gold_return)
+        print("The expected return of the portfolio is:", portfolio_return)
+
+        portfolio_risk = calculate_portfolio_risk(weights, asset_A.std_deviation, asset_B.std_deviation, correlation_coef)
+        print("The risk of the portfolio is:", portfolio_risk)
+
+    except exception as e:
+        print(e)
+        print(traceback.print_exc())
+
+
+    try:
+        expected_return, standard_deviation = calculate_standard_deviation(user_probabilities, user_expected_returns)
+        print("The expected return of the portfolio is:", expected_return)
+        print("The standard deviation of the portfolio is:", standard_deviation)
+    except ValueError as e:
+        print(e)
+        print(traceback.print_exc())
+
 
 
 
