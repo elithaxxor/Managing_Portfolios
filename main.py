@@ -167,7 +167,7 @@ def main():
           "and standard deviation of the optimal portfolio?"
           "\n enter '2' if you like to calculate the Sharpe ratio of the optimal portfolio?"
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
-          "\n enter '4' if you like to calculate the expected return of a portfolio with given weights and returns of assets")
+          "\n enter '4' Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets")
 
     choice = input("Enter your choice: ")
 
@@ -274,8 +274,10 @@ def main():
         print(e)
         print(traceback.print_exc())
 
+
     # Option 4 Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets
     if choice == '4':
+        print("You have chosen to calculate the expected return and standard deviation of a portfolio with given weights and returns of assets")
         try:
             expected_return, standard_deviation = calculate_standard_deviation(user_probabilities, user_expected_returns)
             print("The expected return of the portfolio is:", expected_return)
