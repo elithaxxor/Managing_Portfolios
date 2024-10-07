@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import traceback
 
 # Define the Asset class, access the expected return and standard deviation of the asset
+# I made this a class, so that I can easily access the expected return and standard deviation of the asset
 @dataclass
 class Asset:
     expected_return: float
