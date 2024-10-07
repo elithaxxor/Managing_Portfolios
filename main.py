@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from dataclasses import dataclass
+import traceback
 
 # Define the Asset class, access the expected return and standard deviation of the asset
 @dataclass
@@ -126,18 +127,23 @@ def expected_return_finance(probabilities, returns):
 
 
 def main():
-    # Get input for Asset A, Asset B, and T-bills
-    print("Enter the details for Expectd Return and Standard devation for  A:")
-    asset_A = get_asset_input("Asset A")
-    print("asset A input: " , asset_A)
-    print("\nEnter the details for Expectd Return and Standard devation for  B:")
-    asset_B = get_asset_input("Asset B")
-    print("asset B input: " , asset_B)
+    try:
+        # Get input for Asset A, Asset B, and T-bills
+        print("Enter the details for Expectd Return and Standard devation for  A:")
+        asset_A = get_asset_input("Asset A")
+        print("asset A input: " , asset_A)
+        print("\nEnter the details for Expectd Return and Standard devation for  B:")
+        asset_B = get_asset_input("Asset B")
+        print("asset B input: " , asset_B)
 
-    print("\nEnter the details for Expectd Return and Standard devation for T-bills:")
+        print("\nEnter the details for Expectd Return and Standard devation for T-bills:")
 
-    t_bills = get_asset_input("T-bills")
-    print("asset a input: " , t_bills)
+        t_bills = get_asset_input("T-bills")
+        print("asset a input: " , t_bills)
+    except Exception as e:
+        print(e)
+        print(traceback.print_exc())
+        return
 
     # Plot the opportunity set
     plot_oppurtunity_set(asset_A, asset_B, t_bills)
@@ -175,8 +181,14 @@ def main():
 
         user_expected_returns = input_expected_returns()
         print("The entered expected returns are:", user_expected_returns)
+
+        expected_return_calculated = expected_return_finance(user_probabilities, user_expected_returns)
+        print("The calculated expected return is:", expected_return_calculated)
+
     except ValueError as e:
         print(e)
+        print(traceback.print_exc())
+
 
 
 if __name__ == '__main__':
