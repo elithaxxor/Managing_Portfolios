@@ -65,6 +65,66 @@ def calculate_cal_slope(optimal_return, optimal_std_dev, t_bill_return):
 
 
 
+## gets input probabilites fron uyser to calculate the expected return
+def input_probabilities():
+    """
+    Takes input from the user to create an array of probabilities that sum to 1.
+
+    Returns:
+        list of float: A list of probabilities entered by the user.
+    """
+    probabilities = []
+    num_outcomes = int(input("Enter the number of possible outcomes: "))
+
+    for i in range(num_outcomes):
+        prob = float(input(f"Enter the probability for outcome {i + 1}: "))
+        if prob < 0 or prob > 1:
+            print("Probability must be between 0 and 1. Please enter again.")
+            prob = float(input(f"Enter the probability for outcome {i + 1}: "))
+        probabilities.append(prob)
+
+    # Check if the sum of probabilities is approximately 1
+    if not (0.99 <= sum(probabilities) <= 1.01):
+        raise ValueError("The probabilities do not sum to 1. Please re-enter them.")
+
+    return probabilities
+
+
+
+def input_expected_returns():
+    """
+    Takes input from the user to create an array of expected returns.
+
+    Returns:
+        list of float: A list of expected returns entered by the user.
+    """
+    expected_returns = []
+    num_outcomes = int(input("Enter the number of possible outcomes: "))
+
+    for i in range(num_outcomes):
+        ret = float(input(f"Enter the expected return for outcome {i + 1} (as decimal, e.g., 0.12 for 12%): "))
+        expected_returns.append(ret)
+
+    return expected_returns
+
+
+
+# Example usage
+
+def expected_return_finance(probabilities, returns):
+    # Check if lengths of inputs match
+    if len(probabilities) != len(returns):
+        raise ValueError("The lengths of probabilities and returns must match.")
+
+    # Check if probabilities sum to 1
+    if not (0.99 <= sum(probabilities) <= 1.01):
+        raise ValueError("The sum of the probabilities must be approximately 1.")
+
+    return sum([prob * ret for prob, ret in zip(probabilities, returns)])
+
+
+
+
 def main():
     # Get input for Asset A, Asset B, and T-bills
     print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -79,9 +139,11 @@ def main():
     t_bills = get_asset_input("T-bills")
     print("asset a input: " , t_bills)
 
+    # Plot the opportunity set
     plot_oppurtunity_set(asset_A, asset_B, t_bills)
 
 
+    # Calculate the optimal portfolio weights for assets A and B
     print("\nEnter the correlation coefeciant for the funds s:")
     global correlation_coef
     global covariance_AB
@@ -106,6 +168,15 @@ def main():
          "\n  Optimal Standard Deviation is: ", res[3], "\n", "the Sharpe ratio is: ", cal_slope)
 
 
+    # Example usage of the expected_return_finance function
+    try:
+        user_probabilities = input_probabilities()
+        print("The entered probabilities are:", user_probabilities)
+
+        user_expected_returns = input_expected_returns()
+        print("The entered expected returns are:", user_expected_returns)
+    except ValueError as e:
+        print(e)
 
 
 if __name__ == '__main__':
