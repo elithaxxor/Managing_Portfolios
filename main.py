@@ -109,9 +109,7 @@ def input_expected_returns():
     return expected_returns
 
 
-
-# Example usage
-
+#The expected return of an asset or portfolio in finance is the weighted average of possible returns, with the weights being the probabilities of each return happening. The formula to calculate the expected return is:
 def expected_return_finance(probabilities, returns):
     # Check if lengths of inputs match
     if len(probabilities) != len(returns):
@@ -174,7 +172,7 @@ def main():
          "\n  Optimal Standard Deviation is: ", res[3], "\n", "the Sharpe ratio is: ", cal_slope)
 
 
-    # Example usage of the expected_return_finance function
+    #  expected_return_finance function
     try:
         user_probabilities = input_probabilities()
         print("The entered probabilities are:", user_probabilities)
