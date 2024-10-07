@@ -160,71 +160,97 @@ def calculate_standard_deviation(probabilities, returns):
 
 
 def main():
-    try:
-        # Get input for Asset A, Asset B, and T-bills
-        print("Enter the details for Expectd Return and Standard devation for  A:")
-        asset_A = get_asset_input("Asset A")
-        print("asset A input: " , asset_A)
-        print("\nEnter the details for Expectd Return and Standard devation for  B:")
-        asset_B = get_asset_input("Asset B")
-        print("asset B input: " , asset_B)
+    global correlation_coef, user_expected_returns, user_probabilities, covariance_AB,\
+        user_probabilities, user_expected_returns, user_probabilities, user_expected_returns, asset_A, asset_B, t_bills
+    print("Welcome to the Portfolio Optimization Tool!\n "
+          "enter '1' if you like to calculate the optimal portfolio weights for assets A and B, and the expected return "
+          "and standard deviation of the optimal portfolio?"
+          "\n enter '2' if you like to calculate the Sharpe ratio of the optimal portfolio?"
+          "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
+          "\n enter '4' if you like to calculate the expected return of a portfolio with given weights and returns of assets")
 
-        print("\nEnter the details for Expectd Return and Standard devation for T-bills:")
+    choice = input("Enter your choice: ")
 
-        t_bills = get_asset_input("T-bills")
-        print("asset a input: " , t_bills)
-    except Exception as e:
-        print(e)
-        print(traceback.print_exc())
-        return
+    if choice == '1':
+        print("You have chosen to calculate the optimal portfolio weights for assets A and B, and the expected return and standard deviation of the optimal portfolio")
+        try:
+            # Get input for Asset A, Asset B, and T-bills
+            print("Enter the details for Expectd Return and Standard devation for  A:")
+            asset_A = get_asset_input("Asset A")
+            print("asset A input: " , asset_A)
+            print("\nEnter the details for Expectd Return and Standard devation for  B:")
+            asset_B = get_asset_input("Asset B")
+            print("asset B input: " , asset_B)
 
-    # Plot the opportunity set
-    plot_oppurtunity_set(asset_A, asset_B, t_bills)
+            print("\nEnter the details for Expectd Return and Standard devation for T-bills:")
 
+            t_bills = get_asset_input("T-bills")
+            print("asset a input: " , t_bills)
 
-    # Calculate the optimal portfolio weights for assets A and B
-    print("\nEnter the correlation coefeciant for the funds s:")
-    global correlation_coef, user_expected_returns, user_probabilities
-    global covariance_AB
-    correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
-    covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+            return
+            # Plot the opportunity set
+        plot_oppurtunity_set(asset_A, asset_B, t_bills)
 
-    print("Covariance of A and B: ", covariance_AB)
-    res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
-    print("Weight of A in the optimal portfolio: ", res[0])
-    print("Weight of B in the optimal portfolio: ", res[1])
-    print("Expected return of the optimal portfolio: ", res[2])
-    print("Standard deviation of the optimal portfolio: ", res[3])
+    # NOTE: OPTION 1-- Calculate the optimal portfolio weights for assets A and B
+    elif choice == '2':
+        print("You have chosen to calculate the Sharpe ratio of the optimal portfolio")
+        try:
+            # Calculate the optimal portfolio weights for assets A and B
+            print("Calculate the optimal portfolio weights for assets A and B\nEnter the correlation coefeciant for the funds s:")
+            global correlation_coef, user_expected_returns, user_probabilities
+            global covariance_AB
+            correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
+            covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
 
-    # Calculate the Sharpe ratio of the optimal portfolioc
-    asset_A_optimal_weight = res[0]
-    asset_B_optimal_weight = res[1]
-    t_bill_return = t_bills.expected_return
-    print("cal_slope: ", t_bill_return, "Optimal Expected Return", res[2], "optimal standard devaition", res[3])
-    cal_slope = calculate_cal_slope(res[2], res[3], t_bill_return)
+            print("Covariance of A and B: ", covariance_AB)
+            res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
+            print("Weight of A in the optimal portfolio: ", res[0])
+            print("Weight of B in the optimal portfolio: ", res[1])
+            print("Expected return of the optimal portfolio: ", res[2])
+            print("Standard deviation of the optimal portfolio: ", res[3])
 
-    print("Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
-         "\n  Optimal Standard Deviation is: ", res[3], "\n", "the Sharpe ratio is: ", cal_slope)
+            # Calculate the Sharpe ratio of the optimal portfolioc
+            asset_A_optimal_weight = res[0]
+            asset_B_optimal_weight = res[1]
+            t_bill_return = t_bills.expected_return
+            print("cal_slope: ", t_bill_return, "Optimal Expected Return", res[2], "optimal standard devaition", res[3])
+            cal_slope = calculate_cal_slope(res[2], res[3], t_bill_return)
+
+            print("Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
+                 "\n  Optimal Standard Deviation is: ", res[3], "\n", "the Sharpe ratio is: ", cal_slope)
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
 
 
     #  expected_return_finance function
+    # NOTE: OPTION 2-- Calculate the expected return of a portfolio with given weights and returns of assets
+
+    if choice == '3':
+        print("You have chosen to calculate the expected return of a portfolio with given weights and returns of assets")
+        try:
+            print("Calculate the expected return of a portfolio with given weights and returns of assets \nEnter the probabilities for the outcomes")
+            user_probabilities = input_probabilities()
+            print("The entered probabilities are:", user_probabilities)
+
+            user_expected_returns = input_expected_returns()
+            print("The entered expected returns are:", user_expected_returns)
+
+            expected_return_calculated = expected_return_finance(user_probabilities, user_expected_returns)
+            print("The calculated expected return is:", expected_return_calculated)
+
+        except ValueError as e:
+            print(e)
+            print(traceback.print_exc())
+
+
+    # Option 3 Calculate the expected return of a portfolio with given weights and returns of assets
     try:
-        user_probabilities = input_probabilities()
-        print("The entered probabilities are:", user_probabilities)
-
-        user_expected_returns = input_expected_returns()
-        print("The entered expected returns are:", user_expected_returns)
-
-        expected_return_calculated = expected_return_finance(user_probabilities, user_expected_returns)
-        print("The calculated expected return is:", expected_return_calculated)
-
-    except ValueError as e:
-        print(e)
-        print(traceback.print_exc())
-
-
-    # Calculate the expected return of a portfolio with given weights and returns of assets
-    try:
+        print("Calculate the expected return of a portfolio with given weights and returns of assets")
         print("Enter the weights for the portfolio")
         weights = float(input("Enter the weight for the stocks (as decimal, e.g., 0.6 for 60%): "))
         stocks_return = float(input("Enter the expected return for stocks: [Enter 0 to use Asset A's expected return] "))
@@ -248,14 +274,15 @@ def main():
         print(e)
         print(traceback.print_exc())
 
-
-    try:
-        expected_return, standard_deviation = calculate_standard_deviation(user_probabilities, user_expected_returns)
-        print("The expected return of the portfolio is:", expected_return)
-        print("The standard deviation of the portfolio is:", standard_deviation)
-    except ValueError as e:
-        print(e)
-        print(traceback.print_exc())
+    # Option 4 Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets
+    if choice == '4':
+        try:
+            expected_return, standard_deviation = calculate_standard_deviation(user_probabilities, user_expected_returns)
+            print("The expected return of the portfolio is:", expected_return)
+            print("The standard deviation of the portfolio is:", standard_deviation)
+        except ValueError as e:
+            print(e)
+            print(traceback.print_exc())
 
 
 
