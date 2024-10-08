@@ -213,17 +213,7 @@ def plot_oppurtunity_set(asset_A, asset_B, t_bills):
 
 
 def calculate_sharpe_ratio(expected_return, risk_free_rate, std_dev):
-    """
-    Calculate the Sharpe ratio of the risky portfolio.
 
-    Args:
-        expected_return (float): Expected return of the risky portfolio.
-        risk_free_rate (float): Risk-free rate (T-bill return).
-        std_dev (float): Standard deviation (risk) of the risky portfolio.
-
-    Returns:
-        float: Sharpe ratio.
-    """
     sharp_ratio = (expected_return - risk_free_rate) / std_dev
     print("Sharpe Ratio: ", sharp_ratio)
     return sharp_ratio
@@ -529,23 +519,24 @@ def main():
     print("\nWelcome to the Portfolio Optimization Tool!\n "
           "\n3enter '1' if you like to calculate the optimal portfolio weights for assets A and B, and the expected return "
           "and standard deviation of the optimal portfolio?"
-          "\n enter '2' if you like to calculate the Sharpe ratio of the optimal portfolio?"
+          "\n enter '2' [Problem 16] Calculate CALs slope, and draw grapsh "
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
           "\n enter '4' Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
           "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
           "\n enter '6' [Problem 13] to calculate the Expected rate of return, given 1 asset and Risk free asset "
-          "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?")
+          "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
+          "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?")
 
 
 
     choice = input("Enter your choice: ")
-    if choice not in ['1', '2', '3', '4', '5', '6', '7']:
+    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8']:
         print("\nInvalid choice. Please enter a valid choice.\n")
         main()
 
 
     if choice == '1':
-        print("You have chosen to calculate the optimal portfolio weights for assets A and B, and the expected return and standard deviation of the optimal portfolio")
+        print("[Problem 16] plot and calculate the optimal portfolio weights for assets A and B, and the expected return and standard deviation of the optimal portfolio")
         try:
             # Get input for Asset A, Asset B, and T-bills
             print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -578,16 +569,24 @@ def main():
 
     # NOTE: OPTION 1-- Calculate the optimal portfolio weights for assets A and B
     elif choice == '2':
-        print("You have chosen to calculate the Sharpe ratio of the optimal portfolio")
+        print("[QUESTION 16] You have chosen to Draw the CAL of your portfolio on an expected return–standard deviation diagram. Find CALs slope.")
         try:
             # Calculate the optimal portfolio weights for assets A and B
             print("Calculate the optimal portfolio weights for assets A and B\nEnter the correlation coefeciant for the funds s:")
             global correlation_coef, user_expected_returns, user_probabilities
             global covariance_AB
-            correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
-            covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
+            # correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
+            # covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
+            #
+            # print("Covariance of A and B: ", covariance_AB)
 
-            print("Covariance of A and B: ", covariance_AB)
+            asset_A = get_asset_input("Asset A")
+            asset_B = get_asset_input("Asset B")
+            t_bills = get_asset_input("T-bills")
+
+            sharpe_ratio = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+            print(f"Sharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
+
             res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
             print("Weight of A in the optimal portfolio: ", res[0])
             print("Weight of B in the optimal portfolio: ", res[1])
@@ -595,14 +594,15 @@ def main():
             print("Standard deviation of the optimal portfolio: ", res[3])
 
             # Calculate the Sharpe ratio of the optimal portfolioc
-            asset_A_optimal_weight = res[0]
-            asset_B_optimal_weight = res[1]
-            t_bill_return = t_bills.expected_return
-            print("cal_slope: ", t_bill_return, "Optimal Expected Return", res[2], "optimal standard devaition", res[3])
-            cal_slope = calculate_cal_slope(res[2], res[3], t_bill_return)
 
-            print("Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
-                 "\n  Optimal Standard Deviation is: ", res[3], "\n", "cal slope: ", cal_slope)
+            cal_slope = calculate_cal_slope(res[2], res[3], t_bills.expected_return)
+            print("cal_slope: ", cal_slope, "Optimal Expected Return", res[2], "optimal standard devaition", res[3])
+
+            cal_slope2 = calculate_cal_slope2(sharpe_ratio, t_bills.expected_return, asset_A.std_deviation)
+            plot_cal(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+
+            print("[ANSWER] Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
+                 "\n  Optimal Standard Deviation is: ", res[3], "\n", "cal slope: ", cal_slope, "cal_slope2: ", cal_slope2)
 
         except Exception as e:
             print(e)
@@ -683,8 +683,17 @@ def main():
         print("\n\nYou have chosen to calculate the correlation coefeciant for the funds")
         try:
 
-            asset_A, asset_B, t_bills = asset_input()
-           # user_probabilities = input_probabilities()
+            asset_A = get_asset_input("Asset A")
+            asset_B = get_asset_input("Asset B")
+            t_bills = get_asset_input("T-bills")
+            res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
+            print("\n\nWeight of A in the optimal portfolio: ", res[0])
+            print("Weight of B in the optimal portfolio: ", res[1])
+            print("Expected return of the optimal portfolio: ", res[2])
+            print("Standard deviation of the optimal portfolio: ", res[3])
+            print("The expected return of the client's portfolio is:", client_portfolio_return)
+            print("The standard deviation of the client's portfolio is:", standard_deviation)
+            print("The Sharpe ratio of the client's portfolio is:", sharp_ratio)           # user_probabilities = input_probabilities()
 
             coorelation = correlation_coeficant_calculation(asset_A, asset_B)
 
@@ -738,7 +747,7 @@ def main():
                 print(traceback.print_exc())
 
     if choice == '6':
-        print("You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
+        print("[QUESTION 13] You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
         try:
           #  asset_A, asset_B, t_bills = asset_input()
             asset_A = get_asset_input("Asset A")
@@ -757,7 +766,7 @@ def main():
             print(traceback.print_exc())
 
     if choice == '7':
-        print("\n\nYou have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
+        print("\n\n[Question 14]You have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
         try:
 
             # asset_A = get_asset_input("Asset A")
@@ -773,7 +782,7 @@ def main():
             client_investment_C = client_weight_in_risky * proportion_stock_C
             client_investment_t_bills = 1 - client_weight_in_risky
             total_proportion = proportion_stock_A + proportion_stock_B + proportion_stock_C
-            
+
             print("\n\nProportion of Stock A: ", proportion_stock_A, "Proportion of Stock B: ", proportion_stock_B,
                   "Proportion of Stock C: ", proportion_stock_C, "Total Proportion: ", total_proportion)
             print("Proportion of Stock A: ", proportion_stock_A, "Proportion of Stock B: ", proportion_stock_B,
@@ -784,15 +793,22 @@ def main():
             print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: ", client_investment_A, "\nClient's Investment in Stock B: ", client_investment_B, "\nClient's Investment in Stock C: \n", client_investment_C,
                   "\nClient's Investment in T-bills: ", client_investment_t_bills)
 
+            # Calculate the expected return of the client's portfolio
 
-            res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
-            print("\n\nWeight of A in the optimal portfolio: ", res[0])
-            print("Weight of B in the optimal portfolio: ", res[1])
-            print("Expected return of the optimal portfolio: ", res[2])
-            print("Standard deviation of the optimal portfolio: ", res[3])
-            print("The expected return of the client's portfolio is:", client_portfolio_return)
-            print("The standard deviation of the client's portfolio is:", standard_deviation)
-            print("The Sharpe ratio of the client's portfolio is:", sharp_ratio)
+
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '8':
+        print("\n\n[Question 15] [Sharp Ratio]You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
+        try:
+            t_bills = get_asset_input("T-bills")
+            asset_A = get_asset_input("Asset A")
+
+            sharpe_ratio = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+            print(f"Sharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
 
         except Exception as e:
             print(e)
