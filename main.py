@@ -496,11 +496,31 @@ def calculate_standard_deviation(t_bills, asset_A,  weight):
     return standard_deviation
 ##################################
 ''' TO CALCULATE EXPECTED RETURN AND STANDARD DEVIATION OF A PORTFOLIO WITH GIVEN WEIGHTS AND RETURNS OF ASSETS'''
-
+## [QUESTINO 16]
 def calculate_proportion_y(target_return, risky_return, risk_free_rate):
     proportion_y = (target_return - risk_free_rate) / (risky_return - risk_free_rate)
     print("proportion_y: ", proportion_y)
     return proportion_y
+
+
+################### [qUESTION 18]
+ '''Calculate the investment proportion y to ensure the complete portfolio's standard deviation
+    does not exceed a specified maximum.'''
+def calculate_investment_proportion_y(max_std_dev_given, std_dev_risky):
+    proportion_y = (max_std_dev_given - std_dev_risky) / (max_std_dev_given - std_dev_risky)
+
+    proprotion_y2 = max_std_dev_complete / std_dev_risky
+    print("max_std_dev_given: ", max_std_dev_given, "std_dev_risky: ", std_dev_risky)
+    print("proportion_y: ", proportion_y)
+    print("proportion_y2: ", proprotion_y2)
+    return proprotion_y2
+
+'''    Calculate the expected return of the complete portfolio.'''
+def calculate_expected_return_complete(y, risky_return, risk_free_rate):
+    expected_portoflio_return = y * risky_return + (1 - y) * risk_free_rate
+    print("expected_portoflio_return: ", expected_portoflio_return)
+    return y * risky_return + (1 - y) * risk_free_rate
+########################################
 
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -533,7 +553,8 @@ def main():
           "\n enter '6' [Problem 13] to calculate the Expected rate of return, given 1 asset and Risk free asset "
           "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
           "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
-          "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio")
+          "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
+          "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio")
 
 
 
@@ -832,6 +853,22 @@ def main():
 
             proportion_y = calculate_proportion_y(target_return, asset_A.expected_return, t_bills.expected_return)
             print(f"The proportion of the risky portfolio to the complete portfolio is: {proportion_y:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '9':
+        print("\n\n[Question 18] You have chosen to calculate the investment proportion, expected return, and standard deviation of the complete portfolio")
+        try:
+            print("\n")
+            max_std_dev_given = float(input("Enter the maximum standard deviation for the complete portfolio: "))
+            asset_A = get_asset_input("Asset A")
+            y = calculate_investment_proportion_y(max_std_dev_given, std_dev_risky) # Calculate the investment proportion y to ensure the complete portfolio's standard deviation does not exceed a specified maximum.
+
+            print(f"\n\n[ANSWER- PROBLEM 18] \n The investment proportion 'Y' to ensure the complete portfolio's standard deviation does not exceed {max_std_dev_given} is: {y:.4f}")
+            results = calculate_expected_return_complete(y, asset_A.expected_return, t_bills.expected_return) #    Calculate the expected return of the complete portfolio.
+            print(f"The expected return of the complete portfolio is: {results:.4f}")
 
         except Exception as e:
             print(e)
