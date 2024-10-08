@@ -522,6 +522,33 @@ def calculate_expected_return_complete(y, risky_return, risk_free_rate):
     return y * risky_return + (1 - y) * risk_free_rate
 ########################################
 
+''' QUESTION 28B  Calculate the maximum fee that can be charged such that the investor's Sharpe ratio
+    is at least equal to that of the passive portfolio.
+    '''
+def calculate_max_fee(risky_return, risk_free_rate, risky_std_dev, passive_return, passive_std_dev):
+
+    # Calculate the Sharpe ratio of the optimal risky portfolio AND     # Calculate the Sharpe ratio of the passive portfolio
+    sharpe_ratio = (risky_return - risk_free_rate) / risky_std_dev
+    sharpe_passive = (passive_return - risk_free_rate) / passive_std_dev
+    max_fee = (sharpe_ratio - sharpe_passive) / sharpe_ratio
+    print("\nmax_fee: ", max_fee, "sharpe_ratio: ", sharpe_ratio, "sharpe_passive: ", sharpe_passive)
+    return max_fee
+############################
+''' QUESTION 4: '''
+
+def calculate_present_value(expected_cash_flow, required_return):
+
+    present_value = expected_cash_flow / (1 + required_return)
+    print("present_value: ", present_value)
+    return expected_cash_flow / (1 + required_return)
+
+def calculate_expected_rate_of_return(expected_cash_flow, purchase_price):
+    expected_rate_of_return = (expected_cash_flow / purchase_price) - 1
+    print("expected_rate_of_return: ", expected_rate_of_return)
+    return (expected_cash_flow / purchase_price) - 1
+
+
+######################
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
     asset_A = get_asset_input("Asset A")
@@ -554,12 +581,16 @@ def main():
           "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
           "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
           "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
-          "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio")
+          "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
+            "\n enter '11' [Problem 28A] reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio"
+          "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year"
+          "\n enter '13' [Problem 4] [Calculate Present Value] To determine how much you are willing to pay for the risky portfolio, "
+          "we can calculate the present value (fair price) of the portfolio based on the required risk premium and the risk-free rate.")
 
 
 
     choice = input("Enter your choice: ")
-    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
+    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']:
         print("\nInvalid choice. Please enter a valid choice.\n")
         main()
 
@@ -858,7 +889,7 @@ def main():
             print(e)
             print(traceback.print_exc())
 
-    if choice == '9':
+    if choice == '10':
         print("\n\n[Question 18] You have chosen to calculate the investment proportion, expected return, and standard deviation of the complete portfolio")
         try:
             print("\n")
@@ -869,6 +900,72 @@ def main():
             print(f"\n\n[ANSWER- PROBLEM 18] \n The investment proportion 'Y' to ensure the complete portfolio's standard deviation does not exceed {max_std_dev_given} is: {y:.4f}")
             results = calculate_expected_return_complete(y, asset_A.expected_return, t_bills.expected_return) #    Calculate the expected return of the complete portfolio.
             print(f"The expected return of the complete portfolio is: {results:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    ''' Question 28A Calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio-- PASSIVE / ACTIVE '''
+    if choice == '11':
+        print("\n\n[Question 28A] You have chosen to calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio")
+        try:
+            print("\n")
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+
+            passive_yield = float(input("Enter the expected return of the passive investment: "))
+            passive_std = float(input("Enter the standard deviation of the passive investment: "))
+
+            # Calculate Sharpe ratios [Passive and active
+            sharpe_active = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+            sharpe_passive = calculate_sharpe_ratio(passive_yield, t_bills.expected_return, passive_std)
+
+            print(f"Sharpe Ratio of Active Portfolio: {sharpe_active:.4f}")
+            print(f"Sharpe Ratio of Passive Portfolio: {sharpe_passive:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+
+    '''[Problem 28B] Calculate the maximum fee that can be charged such that the investor's Sharpe ratio is at least equal to that of the passive portfolio.'''
+    if choice == '12':
+        print("\n\n[Question 28B] You have chosen to calculate the maximum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year)")
+        print("    Calculate the maximum fee that can be charged such that the investor's Sharpe ratio is at least equal to that of the passive portfolio.")
+        try:
+            print("\n")
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+
+            passive_return = float(input("Enter the expected return of the passive investment: "))
+            passive_std_dev = float(input("Enter the standard deviation of the passive investment: "))
+
+            print("\n inputs: \nasset_A: ", asset_A, "t_bills: ", t_bills, "passive_return: ", passive_return, "passive_std_dev: ", passive_std_dev)
+
+            max_fee = calculate_max_fee(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation, passive_return, passive_std_dev)
+            print(f"[QUESTION 28B] -- ANSWERThe maximum fee you could charge is: {max_fee:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '13':
+        print("\n\n[Question 4] You have chosen to calculate the present value (fair price) of the portfolio based on the required risk premium and the risk-free rate.")
+        try:
+            min_cash_flow = float(input("Enter the minimum expected cash flow: "))
+            max_cash_flow = float(input("Enter the maximum expected cash flow: "))
+            probability = float(input("Enter the probability of the maximum cash flow: "))
+            risk_premium = float(input("Enter the required risk premium: "))
+            t_bills = get_asset_input("T-bills")
+
+            expected_cash_flow = (probability * cash_flow_low) + (probability * cash_flow_high)
+            present_value = calculate_present_value(expected_cash_flow, risk_premium)
+            expected_rate_of_return = calculate_expected_rate_of_return(expected_cash_flow, present_value)
+
+            print(f"\n\n [QUESTION 4 ANSWER] \n The present value of the portfolio is: {present_value:.4f},\n "
+                  f"The expected cash flow is: {expected_cash_flow:.4f}"
+                  f"The expected rate of return is: {expected_rate_of_return:.4f}")
+
 
         except Exception as e:
             print(e)
