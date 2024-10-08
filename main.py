@@ -330,6 +330,10 @@ def calculate_cal_slope(optimal_return, optimal_std_dev, t_bill_return):
     print("optimal_return: ", optimal_return, "optimal_std_dev: ", optimal_std_dev, "t_bill_return: ", t_bill_return, "\ncal_slope: ", cal_slope)
     return (optimal_return - t_bill_return) / optimal_std_dev
 
+def calculate_cal_slope2(sharpe_ratio, t_bill_return, std_dev):
+    cal_slope2 = (sharpe_ratio * std_dev) + t_bill_return
+    print("cal_slope2: ", cal_slope2)
+    return cal_slope2
 
 #################################
 # [USER INPUT]
@@ -580,6 +584,7 @@ def main():
             #
             # print("Covariance of A and B: ", covariance_AB)
 
+
             asset_A = get_asset_input("Asset A")
             asset_B = get_asset_input("Asset B")
             t_bills = get_asset_input("T-bills")
@@ -595,14 +600,12 @@ def main():
 
             # Calculate the Sharpe ratio of the optimal portfolioc
 
-            cal_slope = calculate_cal_slope(res[2], res[3], t_bills.expected_return)
-            print("cal_slope: ", cal_slope, "Optimal Expected Return", res[2], "optimal standard devaition", res[3])
 
             cal_slope2 = calculate_cal_slope2(sharpe_ratio, t_bills.expected_return, asset_A.std_deviation)
             plot_cal(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
 
-            print("[ANSWER] Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
-                 "\n  Optimal Standard Deviation is: ", res[3], "\n", "cal slope: ", cal_slope, "cal_slope2: ", cal_slope2)
+            print("\n\n\n[ANSWER- QUESTION 16] Given the optimal portfolio \n", "Optimal Expected Return is: ", res[2],
+                 "\n  Optimal Standard Deviation is: ", res[3], "\n", "cal_slope2: ", cal_slope2)
 
         except Exception as e:
             print(e)
