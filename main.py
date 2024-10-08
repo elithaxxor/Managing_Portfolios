@@ -497,7 +497,10 @@ def calculate_standard_deviation(t_bills, asset_A,  weight):
 ##################################
 ''' TO CALCULATE EXPECTED RETURN AND STANDARD DEVIATION OF A PORTFOLIO WITH GIVEN WEIGHTS AND RETURNS OF ASSETS'''
 
-
+def calculate_proportion_y(target_return, risky_return, risk_free_rate):
+    proportion_y = (target_return - risk_free_rate) / (risky_return - risk_free_rate)
+    print("proportion_y: ", proportion_y)
+    return proportion_y
 
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -529,12 +532,13 @@ def main():
           "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
           "\n enter '6' [Problem 13] to calculate the Expected rate of return, given 1 asset and Risk free asset "
           "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
-          "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?")
+          "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
+          "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio")
 
 
 
     choice = input("Enter your choice: ")
-    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8']:
+    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
         print("\nInvalid choice. Please enter a valid choice.\n")
         main()
 
@@ -804,6 +808,8 @@ def main():
             print(e)
             print(traceback.print_exc())
 
+
+
     if choice == '8':
         print("\n\n[Question 15] [Sharp Ratio]You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
         try:
@@ -817,6 +823,19 @@ def main():
             print(e)
             print(traceback.print_exc())
 
+    if choice == '9':
+        print("\n\n[Question 17] You have chosen to find 'Y', the proportion of the risky portfolio given a specific rate of return to the complete portfolio")
+        try:
+            target_return = float(input("Enter the target rate of return: [this will be used to find the optimal portolio) "))
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+
+            proportion_y = calculate_proportion_y(target_return, asset_A.expected_return, t_bills.expected_return)
+            print(f"The proportion of the risky portfolio to the complete portfolio is: {proportion_y:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
 
 
 if __name__ == '__main__':
