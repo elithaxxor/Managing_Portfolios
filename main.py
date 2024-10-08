@@ -10,6 +10,135 @@ Define the Asset class, access the expected return and standard deviation of the
 # I made this a class, so that I can easily access the expected return and standard deviation of the asset
 '''
 
+
+@dataclass
+class Portofolio_Portion:
+    proportion_stock_A: float
+    proportion_stock_B: float
+    proportion_stock_C: float
+
+    def __init__(self, proportion_stock_A, proportion_stock_B, proportion_stock_C, total_proportion):
+        self.proportion_stock_A = proportion_stock_A
+        self.proportion_stock_B = proportion_stock_B
+        self.proportion_stock_C = proportion_stock_C
+        self.clients_weight_in_risky = clients_weight_in_risky
+        self.client_investment_t_bills = client_investment_t_bills
+        self.total_proportion = total_proportion
+
+    def __str__(self):
+        return f"proportion_stock_A: {self.proportion_stock_A}, proportion_stock_B: {self.proportion_stock_B}, proportion_stock_C: {self.proportion_stock_C}, total_proportion: {self.total_proportion}"
+
+    def __repr__(self):
+        return f"proportion_stock_A: {self.proportion_stock_A}, proportion_stock_B: {self.proportion_stock_B}, proportion_stock_C: {self.proportion_stock_C}, total_proportion: {self.total_proportion}"
+
+    def proportion_setter(self, value):
+
+        clients_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%): "))
+        client_investment_t_bills = 1 - clients_weight_in_risky
+
+        proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
+        proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
+        proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
+
+        self.proportion_stock_A = proportion_stock_A
+        self.proportion_stock_B = proportion_stock_B
+        self.proportion_stock_C = proportion_stock_C
+        self.clients_weight_in_risky = clients_weight_in_risky
+        self.clients_inv_t_bills = client_investment_t_bills
+
+
+    @property
+    def total_proportion(self):
+        total_proportion = self.proportion_stock_A + self.proportion_stock_B + self.proportion_stock_C
+        self.total_proportion = total_proportion
+        return self.total_proportion
+
+    @property
+    def weighted_average1(self):
+        return self.proportion_stock_A * self.clients_weight_in_risky
+
+    @property
+    def weighted_average2(self):
+        return self.proportion_stock_B * self.clients_weight_in_risky
+
+    @property
+    def weighted_average3(self):
+        return self.proportion_stock_C * self.clients_weight_in_risky
+    @property
+    def get_proportion(self):
+        return self.proportion_stock_A, self.proportion_stock_B, self.proportion_stock_C, self.total_proportion
+
+    @total_proportion.setter
+    def total_proportion(self, value):
+        self._total_proportion = value
+
+
+@dataclass # Dataclass to store the expected return and standard deviation of an asset
+class Portfolio:
+    expected_return: float
+    std_deviation: float
+    risky_portofolio_return: float
+    risky_portfolio_std_dev: float
+    risk_free_rate: float
+    client_weight_in_risky: float
+    total_proportion: float
+
+def get_portfolio_inputs():
+    """
+    Function to get user input for the risky portfolio return, standard deviation,
+    risk-free rate, and client's weight in the risky portfolio.
+
+    Returns:
+        tuple: Contains the risky portfolio return, risky portfolio standard deviation,
+               risk-free rate, and client weight in the risky portfolio.
+    """
+    try:
+        # Get user inputs
+        risky_portfolio_return = float(input("Enter the expected return of the risky portfolio (e.g., 0.18 for 18%): "))
+        risky_portfolio_std_dev = float(input("Enter the standard deviation of the risky portfolio (e.g., 0.28 for 28%): "))
+        risk_free_rate = float(input("Enter the risk-free rate (e.g., 0.08 for 8%): "))
+        client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%): "))
+
+        expected_return = float(input("Enter the Expected Return: "))
+        std_deviat = float(input("Enter the Standard Deviation: "))
+
+        # Get user inputs
+        proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
+        proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
+        proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
+
+        correlation = correlation_coeficant_calculation(asset_A, t_bills)
+
+        weight_A, weight_B, expected_return, standard_deviation = find_optimal_risky_portfolio(expected_return, std_deviat, correlation, risky_portfolio_return)
+
+        print("weight_A: ", weight_A, "weight_B: ", weight_B, "expected_return: ", expected_return, "standard_deviation: ", standard_deviation)
+        print("risky_portfolio_return: ", risky_portfolio_return, "risky_portfolio_std_dev: ", risky_portfolio_std_dev, "risk_free_rate: ", risk_free_rate, "client_weight_in_risky: ", client_weight_in_risky)
+        print("proportion_stock_A: ", proportion_stock_A, "proportion_stock_B: ", proportion_stock_B, "proportion_stock_C: ", proportion_stock_C, "total_proportion: ", total_proportion)
+        print("expected_return: ", expected_return, "std_deviation: ", std_deviation)
+        print("correlation: ", correlation)
+
+
+        # Ensure the proportions are valid
+        total_proportion = proportion_stock_A + proportion_stock_B + proportion_stock_C
+
+        if not (0 <= proportion_stock_A <= 1 and 0 <= proportion_stock_B <= 1 and 0 <= proportion_stock_C <= 1):
+            raise ValueError("Proportions must be between 0 and 1.")
+        if total_proportion != 1:
+            raise ValueError("The total proportion of stocks A, B, and C must sum to 1.")
+
+        # Ensure the weight is valid
+        if client_weight_in_risky < 0 or client_weight_in_risky > 1:
+            raise ValueError("Client's weight in the risky portfolio must be between 0 and 1.")
+
+        return Portfolio(risky_portfolio_return=risky_portfolio_return, risky_portfolio_std_dev=risky_portfolio_std_dev, risk_free_rate=risk_free_rate,
+                         client_weight_in_risky=client_weight_in_risky, proportion_stock_A=proportion_stock_A, proportion_stock_B=proportion_stock_B,
+                         proportion_stock_C=proportion_stock_C, total_proportion=total_proportion, expected_return=expected_return, std_deviation=std_deviation)
+
+
+    except ValueError as e:
+        print(f"Invalid input: {e}\n", traceback.print_exc())
+
+
 @dataclass
 class Asset:
     expected_return: float
@@ -19,6 +148,8 @@ def get_asset_input(asset_name):
     print("Enter the details for Expectd Return and Standard devation for ", asset_name)
     expected_return = float(input(f"Enter the expected return for {asset_name}: "))
     std_deviation = float(input(f"Enter the standard deviation for {asset_name}: "))
+    print("\nexpected_return: ", expected_return, "std_deviation: ", std_deviation)
+    print("Asset input: ", Asset(expected_return=expected_return, std_deviation=std_deviation))
     return Asset(expected_return=expected_return, std_deviation=std_deviation)
 
 
@@ -169,10 +300,12 @@ def correlation_coeficant(asset_A, asset_B):
     # Calcaulte the correlation coefficient
     correlation_AB = covariance_AB / (std_dev_A * std_dev_B)
 
+    print("Mean of A: ", mean_A, "Mean of B: ", mean_B)
+    print("std_dev_A: ", std_dev_A, "std_dev_B: ", std_dev_B)
     print("Covariance of A and B: ", covariance_AB)
     print("Correlation Coefficient: ", correlation_AB)
 
-    return correlation_coef
+    return correlation_AB
 
 
 ''' takes the expected returns and standard deviations of two assets, calculates the optimal portfolio weights for assets A and B, and provides the expected return and standard deviation of the optimal portfolio.'''
@@ -180,9 +313,10 @@ def calculate_optimal_portfolio(asset_A, asset_B, t_bills):
     # Calculating the covariance of A and B
 
     correlation_coef = correlation_coeficant(asset_A, asset_B)
-
-
     covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
+    print("Covariance of A and B: ", covariance_AB)
+    print("Correlation Coefficient: ", correlation_coef)
+
 
     # Calculating the weights of A and B in the optimal portfolio
     weight_A = (asset_B.std_deviation ** 2 - covariance_AB) / ((asset_A.std_deviation ** 2) + (asset_B.std_deviation ** 2) - 2 * covariance_AB)
@@ -352,44 +486,23 @@ def calculate_standard_deviation(probabilities, returns):
 
     return expected_return, standard_deviation
 
-############################
+###########################################
+def calculate_expected_value(asset_A, weight):
+    asset_A = get_asset_input("Asset A")
+    expected_value = asset_A.std_deviation * weight
+    print("Calculating the expected value of the rate of return on his portfolio")
+    print("\n\nasset_A: ", asset_A, "weight: ", weight)
+    print("expected_value: ", expected_value)
+    return expected_value
+
+def calculate_standard_deviation(t_bills, asset_A,  weight):
+
+    standard_deviation = t_bills.expected_return + weight * (asset_A.expected_return - t_bills.expected_return)
+    print("standard_deviation: ", standard_deviation)
+    return standard_deviation
+##################################
 ''' TO CALCULATE EXPECTED RETURN AND STANDARD DEVIATION OF A PORTFOLIO WITH GIVEN WEIGHTS AND RETURNS OF ASSETS'''
 
-
-def get_portfolio_inputs():
-    """
-    Function to get user input for the risky portfolio return, standard deviation,
-    risk-free rate, and client's weight in the risky portfolio.
-
-    Returns:
-        tuple: Contains the risky portfolio return, risky portfolio standard deviation,
-               risk-free rate, and client weight in the risky portfolio.
-    """
-    try:
-        # Get user inputs
-        risky_portfolio_return = float(input("Enter the expected return of the risky portfolio (e.g., 0.18 for 18%): "))
-        risky_portfolio_std_dev = float(input("Enter the standard deviation of the risky portfolio (e.g., 0.28 for 28%): "))
-        risk_free_rate = float(input("Enter the risk-free rate (e.g., 0.08 for 8%): "))
-        client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%): "))
-        # Get user inputs
-        proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
-        proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
-        proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
-
-        # Ensure the proportions are valid
-        total_proportion = proportion_stock_A + proportion_stock_B + proportion_stock_C
-        if not (0 <= proportion_stock_A <= 1 and 0 <= proportion_stock_B <= 1 and 0 <= proportion_stock_C <= 1):
-            raise ValueError("Proportions must be between 0 and 1.")
-        if total_proportion != 1:
-            raise ValueError("The total proportion of stocks A, B, and C must sum to 1.")
-
-        # Ensure the weight is valid
-        if client_weight_in_risky < 0 or client_weight_in_risky > 1:
-            raise ValueError("Client's weight in the risky portfolio must be between 0 and 1.")
-
-        return risky_portfolio_return, risky_portfolio_std_dev, risk_free_rate, client_weight_in_risky,  proportion_stock_A, proportion_stock_B, proportion_stock_C
-    except ValueError as e:
-        print(f"Invalid input: {e}\n", traceback.print_exc())
 
 
 def asset_input():
@@ -419,11 +532,14 @@ def main():
           "\n enter '2' if you like to calculate the Sharpe ratio of the optimal portfolio?"
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
           "\n enter '4' Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
-          "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio")
+          "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
+          "\n enter '6' [Problem 13] to calculate the Expected rate of return, given 1 asset and Risk free asset "
+          "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?")
+
 
 
     choice = input("Enter your choice: ")
-    if choice not in ['1', '2', '3', '4', '5']:
+    if choice not in ['1', '2', '3', '4', '5', '6', '7']:
         print("\nInvalid choice. Please enter a valid choice.\n")
         main()
 
@@ -572,32 +688,41 @@ def main():
 
             coorelation = correlation_coeficant_calculation(asset_A, asset_B)
 
-            (risky_portfolio_return, risky_portfolio_std_dev, risk_free_rate, client_weight_in_risky,
-             proportion_stock_A, proportion_stock_B, proportion_stock_C) = get_portfolio_inputs()
+            risky_portfolio_return = get_portfolio_inputs()
+            risky_portfolio_std_dev = get_portfolio_inputs()
+            risk_free_rate =  get_portfolio_inputs()
+            client_weight_in_risky= get_portfolio_inputs()
+            proportion_stock_A = get_portfolio_inputs()
+            proportion_stock_B = get_portfolio_inputs()
+            proportion_stock_C = get_portfolio_inputs()
+            total_proportion = get_portfolio_inputs()
 
-            sharp_ratio = calculate_sharpe_ratio(risky_portfolio_return, t_bills.expected_return, risky_portfolio_std_dev)
+
+            sharp_ratio = calculate_sharpe_ratio(Portfolio.risky_portfolio_return, t_bills.expected_return, Portfolio.risky_portfolio_std_dev)
 
             print("Correlation Coefficient: ", coorelation)
             print("Sharpe Ratio: ", sharp_ratio)
-            print(f"\n\nRisky Portfolio Return: {risky_portfolio_return * 100:.2f}%")
-            print(f"Risky Portfolio Standard Deviation: {risky_portfolio_std_dev * 100:.2f}%")
+            print(f"\n\nRisky Portfolio Return: {Portfolio.risky_portfolio_return * 100:.2f}%")
+            print(f"Risky Portfolio Standard Deviation: {Portfolio.risky_portfolio_std_dev * 100:.2f}%")
             print(f"Risk-Free Rate: {risk_free_rate * 100:.2f}%")
             print(f"Client's Weight in Risky Portfolio: {client_weight_in_risky * 100:.2f}%")
             print(f"Proportion of Stock A: {proportion_stock_A * 100:.2f}%",
                   "\nProportion of Stock B: {proportion_stock_B * 100:.2f}%",
                   "\nProportion of Stock C: {proportion_stock_C * 100:.2f}%")
+            print(f"Total Proportion: {total_proportion * 100:.2f}%")
 
             if risky_portfolio_return is not None:
                 # Calculate the expected return of the client's portfolio
-                client_portfolio_return = risky_portfolio_return * client_weight_in_risky + risk_free_rate * (
-                            1 - client_weight_in_risky)
+                client_portfolio_return = risky_portfolio_return * client_weight_in_risky[0] + Portfolio.risk_free_rate * (
+                            1 - Portfolio.client_weight_in_risky)
+
 
                 res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
                 print("Weight of A in the optimal portfolio: ", res[0])
 
                 # Calculate the Sharpe ratio of the optimal portfolio
                 standard_deviation = calculate_portfolio_risk([proportion_stock_A, proportion_stock_B, proportion_stock_C])
-                correlation_coeficant_calculation(proportion_stock_A, proportion_stock_C)
+                correlation_coeficant_calculation(Portfolio.proportion_stock_A, Portfolio.proportion_stock_C)
 
                 print("Weight of B in the optimal portfolio: ", res[1])
                 print("Expected return of the optimal portfolio: ", res[2])
@@ -611,6 +736,68 @@ def main():
         except Exception as e:
                 print(e)
                 print(traceback.print_exc())
+
+    if choice == '6':
+        print("You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
+        try:
+          #  asset_A, asset_B, t_bills = asset_input()
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+            weight = float(input("Enter the weight for the asset (as decimal, e.g., 0.6 for 60%): "))
+            print("asset_A: ", asset_A, "weight: ", weight)
+
+            expected_value = calculate_expected_value(t_bills, weight)
+            std_deviation = calculate_standard_deviation(t_bills, asset_A, weight)
+
+            print("\nThe expected value of the rate of return on his portfolio is:", expected_value)
+            print("The standard deviation of the rate of return on his portfolio is:", std_deviation)
+
+        except ValueError as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '7':
+        print("\n\nYou have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
+        try:
+
+            # asset_A = get_asset_input("Asset A")
+            # asset_B = get_asset_input("Asset B")
+            # t_bills = get_asset_input("T-bills")
+            client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%): "))
+            proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
+            proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
+            proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
+
+            client_investment_A = client_weight_in_risky * proportion_stock_A
+            client_investment_B = client_weight_in_risky * proportion_stock_B
+            client_investment_C = client_weight_in_risky * proportion_stock_C
+            client_investment_t_bills = 1 - client_weight_in_risky
+            total_proportion = proportion_stock_A + proportion_stock_B + proportion_stock_C
+            
+            print("\n\nProportion of Stock A: ", proportion_stock_A, "Proportion of Stock B: ", proportion_stock_B,
+                  "Proportion of Stock C: ", proportion_stock_C, "Total Proportion: ", total_proportion)
+            print("Proportion of Stock A: ", proportion_stock_A, "Proportion of Stock B: ", proportion_stock_B,
+                  "Proportion of Stock C: ", proportion_stock_C, "Total Proportion: ", total_proportion)
+            print("\nClient's Weight in Risky Portfolio: ", client_weight_in_risky)
+
+
+            print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: ", client_investment_A, "\nClient's Investment in Stock B: ", client_investment_B, "\nClient's Investment in Stock C: \n", client_investment_C,
+                  "\nClient's Investment in T-bills: ", client_investment_t_bills)
+
+
+            res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
+            print("\n\nWeight of A in the optimal portfolio: ", res[0])
+            print("Weight of B in the optimal portfolio: ", res[1])
+            print("Expected return of the optimal portfolio: ", res[2])
+            print("Standard deviation of the optimal portfolio: ", res[3])
+            print("The expected return of the client's portfolio is:", client_portfolio_return)
+            print("The standard deviation of the client's portfolio is:", standard_deviation)
+            print("The Sharpe ratio of the client's portfolio is:", sharp_ratio)
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
 
 
 if __name__ == '__main__':
