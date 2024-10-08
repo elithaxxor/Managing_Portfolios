@@ -496,16 +496,17 @@ def calculate_standard_deviation(t_bills, asset_A,  weight):
     return standard_deviation
 ##################################
 ''' TO CALCULATE EXPECTED RETURN AND STANDARD DEVIATION OF A PORTFOLIO WITH GIVEN WEIGHTS AND RETURNS OF ASSETS'''
-## [QUESTINO 16]
+
+'''
+    [Question 16] Calculate the investment proportion y to ensure the complete portfolio's standard deviation
+    does not exceed a specified maximum.
+'''
+
 def calculate_proportion_y(target_return, risky_return, risk_free_rate):
     proportion_y = (target_return - risk_free_rate) / (risky_return - risk_free_rate)
     print("proportion_y: ", proportion_y)
     return proportion_y
 
-
-################### [qUESTION 18]
- '''Calculate the investment proportion y to ensure the complete portfolio's standard deviation
-    does not exceed a specified maximum.'''
 def calculate_investment_proportion_y(max_std_dev_given, std_dev_risky):
     proportion_y = (max_std_dev_given - std_dev_risky) / (max_std_dev_given - std_dev_risky)
 
@@ -549,6 +550,21 @@ def calculate_expected_rate_of_return(expected_cash_flow, purchase_price):
 
 
 ######################
+''' QUESTION 5 - Calculate the maximum level of risk aversion (A) for which the risky portfolio is still preferred to T-bills. '''
+def calculate_max_risk_aversion(risky_return, risk_free_rate, risky_std_dev):
+    return 2 * (risky_return - risk_free_rate) / (risky_std_dev ** 2)
+################
+''' QUESTION 6 - Calculate the expected return and standard deviation of the complete portfolio. 
+ calculate expected return for given utility level and "
+              "plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.")
+'''
+
+def expected_return_for_indifference_curve(U, A, std_dev):
+    expected_return = U + A * std_dev
+    print("expected_return: ", expected_return)
+    return U + A * std_dev
+
+
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
     asset_A = get_asset_input("Asset A")
@@ -582,10 +598,12 @@ def main():
           "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
           "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
           "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
-            "\n enter '11' [Problem 28A] reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio"
+            "\n enter '11' [Problem 28A] r[eward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio"
           "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year"
-          "\n enter '13' [Problem 4] [Calculate Present Value] To determine how much you are willing to pay for the risky portfolio, "
-          "we can calculate the present value (fair price) of the portfolio based on the required risk premium and the risk-free rate.")
+          "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, "
+          "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate."
+          "\n enter '14'  [Problem 5] Calculate the [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. "
+          "\n enter '15'  [Problem 6]  plot the [indifference curve] by calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .")
 
 
 
@@ -854,8 +872,6 @@ def main():
 
             # Calculate the expected return of the client's portfolio
 
-
-
         except Exception as e:
             print(e)
             print(traceback.print_exc())
@@ -966,6 +982,55 @@ def main():
                   f"The expected cash flow is: {expected_cash_flow:.4f}"
                   f"The expected rate of return is: {expected_rate_of_return:.4f}")
 
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '14':
+        print("\n\n[Question 5] calculate the maximum level of risk aversion (A) for which the risky portfolio is still preferred to T-bills.")
+        try:
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+
+            print(f"\n\nThe maximum level of risk aversion (A) for which the risky portfolio is still preferred to T-bills is: {risk_aversion:.4f}")
+
+            max_risk_aversion = calculate_max_risk_aversion(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+            print(f"Maximum Risk Aversion Coefficient (A): {max_risk_aversion:.2f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+
+    if choice == '15':
+        print("\n\n[Question 6] calculate expected return for given utility level and "
+              "plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.")
+        try:
+            asset_A = get_asset_input("Asset A")
+            t_bills = get_asset_input("T-bills")
+
+            utility = float(input("Enter the utility value: "))
+            risk_aversion_coefficient = float(input("Enter the risk aversion coefficient: "))
+            deviation = float(input("Enter the deviation: "))
+            std_devs = np.linspace(0, deviation, 100) # defines values for standard deviation risk
+
+            ## function to calculate the expected return for a given utilyt level
+            expected_return_indifference_curve = expected_return_for_indifference_curve(utility, risk_aversion_coefficient, std_devs)
+            print("\n\n expected return for the indifference curve: ", expected_return_indifference_curve)
+
+            # Plotting the indifference curve
+            plt.figure(figsize=(10, 6))
+            plt.plot(std_devs, expected_returns, label=f'Indifference Curve (U = {utility}, A = {risk_aversion_coefficient})', color='b')
+
+            # Adding labels and title
+            plt.xlabel('Standard Deviation (Risk)')
+            plt.ylabel('Expected Return')
+            plt.title(f'Indifference Curve for Utility Level {utility} and Risk Aversion Coefficient {risk_aversion_coefficient}')
+            plt.grid(True)
+            plt.legend()
+            # Show the plot
+            plt.show()
 
         except Exception as e:
             print(e)
