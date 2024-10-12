@@ -1088,6 +1088,8 @@ def main():
                   f"The expected rate of return is: {expected_rate_of_return:.4f}")
 
 
+
+
         except Exception as e:
             print(e)
             print(traceback.print_exc())
@@ -1315,8 +1317,36 @@ def main():
             print(e)
             print(traceback.print_exc())
 
-    
+    if choice == '21':
+        try:
+            print("\n\n[CHAPTER 6- Question 4] Calculate the present value of the portfolio, given a risk premium.")
+            # Get user inputs
+            min_cash_flow = float(input("Enter the minimum expected cash flow: "))
+            max_cash_flow = float(input("Enter the maximum expected cash flow: "))
+            probability = float(input("Enter the probability of the maximum cash flow: "))
+            risk_premium = float(input("Enter the required risk premium: "))
+            risk_free_rate = float(input("Enter the Risk Free Rate "))
 
+            #t_bills = get_asset_input("T-bills")
+
+            required_return = (risk_free_rate + risk_premium) * 100
+            expected_cash_flow = (probability * min_cash_flow) + (probability * max_cash_flow)
+            expected_cash_flow2 = risk_free_rate + risk_premium
+            combined_cash_flow= expected_cash_flow / (1 + expected_cash_flow2)
+
+            present_value = expected_cash_flow / (1 + required_return)
+            expected_rate_of_return = calculate_expected_rate_of_return(expected_cash_flow, present_value)
+
+            print(f"\n[Answer 1A] The required return is: {required_return:.4f}")
+            print(f"\n[Answer 1B] \nThe present value of the portfolio is: {present_value:.4f}")
+            print(f"\n[Answer 1C] The expected cash flow is: {expected_cash_flow:.4f}")
+            print(f"\n[ANSSWER 1D] The Combined cash flow is: {combined_cash_flow:.4f}")
+
+            print(f"\nThe expected rate of return is: {expected_rate_of_return:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
 
 if __name__ == '__main__':
     main()
