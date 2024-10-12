@@ -660,8 +660,80 @@ def calculate_variance01(values, probabilities, mean):
     print("variance: ", variance)
     return variance
 
+#######################
+''' \n enter '24'  [CHAPTER - 7 Problem 15-]  Suppose you have a project that has a 0.7 chance of doubling your investment in a year and a 0.3 chance of halving your investment in a year. What is the standard deviation of the rate of return on this investment?on of both   \n")
+'''
+def calculate_expected_return00(rates_of_return, probabilities):
+    expected_return = sum(r * p for r, p in zip(rates_of_return, probabilities))
+    return expected_return
+
+# Function to calculate variance
+def calculate_variance00(rates_of_return, probabilities, expected_return):
+    variance = sum(p * (r - expected_return) ** 2 for r, p in zip(rates_of_return, probabilities))
+    return variance
+#######################
+
+'''          "\n enter '25'  [CHAPTER - 7II Problem 1A-]  Compute the expected return and variance of an equally weighted portfolio.   \n")
+'''
+
+# Function to get expected returns from the user
+def get_expected_returns(num_stocks):
+    expected_returns = {}
+    print("\nEnter the stock symbols and their expected returns (as percentages, e.g., 10 for 10%).")
+    for i in range(1, num_stocks + 1):
+        symbol = input(f"Enter the symbol for stock {i}: ")
+        try:
+            expected_return = float(input(f"Enter the expected return for {symbol} (as a percentage): "))
+            expected_returns[symbol] = expected_return / 100  # Convert to decimal
+        except ValueError:
+            print("Invalid input. Please enter a numerical value for the expected return.")
+            exit()
+    return expected_returns
+
+# Function to get the covariance matrix from the user
+def get_covariance_matrix(num_stocks, stock_symbols):
+    print("\nEnter the variances and covariances (as decimals).")
+    # Initialize the covariance matrix with zeros
+    covariance_matrix = np.zeros((num_stocks, num_stocks))
+    for i in range(num_stocks):
+        for j in range(i, num_stocks):
+            if i == j:
+                # Variance input
+                try:
+                    variance = float(input(f"Enter the variance for {stock_symbols[i]}: "))
+                    covariance_matrix[i][j] = variance
+                except ValueError:
+                    print("Invalid input. Please enter a numerical value for the variance.")
+                    exit()
+            else:
+                # Covariance input
+                try:
+                    covariance = float(input(f"Enter the covariance between {stock_symbols[i]} and {stock_symbols[j]}: "))
+                    covariance_matrix[i][j] = covariance
+                    covariance_matrix[j][i] = covariance  # Symmetric matrix
+                except ValueError:
+                    print("Invalid input. Please enter a numerical value for the covariance.")
+                    exit()
+    return covariance_matrix
+
 
 ##########################
+
+
+
+'''          "\n e[CHAPTER - 7II Problem 2D]  CDescribe how you would find the expected return of a portfolio that lies on the CAPITAL allocation line (CAL) WHEN given standard deviatin and risk free rate  \n")
+'''
+
+
+# Function to compute the expected return on the CAL
+def compute_expected_return_CAL(R_f, E_Rm, sigma_m, sigma_p):
+    # Calculate the slope of the CAL (Sharpe Ratio of the risky portfolio)
+    S = (E_Rm - R_f) / sigma_m
+    # Calculate the expected return of the portfolio on the CAL
+    E_Rp = R_f + S * sigma_p
+    return E_Rp
+
+####################
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
     asset_A = get_asset_input("Asset A")
@@ -688,27 +760,31 @@ def main():
           "and standard deviation of the optimal portfolio?"
           "\n enter '2' [CHAPTER - 6 Problem 16] Calculate CALs slope, and draw grapsh "
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
-          "\n enter '4' Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
+          "\n enter '4' [CHAPTER 7- Probelem 15] Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
           "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
           "\n enter '6' [CHAPTER - 6 Problem 13- CHAPTER 6] to calculate the Expected rate of return, given 1 asset and Risk free asset "
           "\n enter '7' [CHAPTER - 6 Problem 14 - CHAPTER 6]] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
           "\n enter '8' [CHAPTER - 6 Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
           "\n enter '9' [CHAPTER - 6 Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
-          "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
+          "\n enter '10' [CHAPTER - 6 Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
             "\n enter '11' [CHAPTER - 6 Problem 28A] [Reward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio\n"
           "\n enter '12' [CHAPTER - 6 Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
           "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, \n"
           "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate.\n"
-          "\n enter '14'  [CHAPTER - 6 Problem 5- CHAPTER 6] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
-          "\n enter '15'  [CHAPTER -6 Problem 6 -- Chapter 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
-          "\n enter '16'  [CHAPTER - 5 Problem 1- CHAPTER 5]  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
-          "\n enter '17'  [CHAPTER - 5 Problem 2- CHAPTER 5]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
+          "\n enter '14'  [CHAPTER - 6 Problem 5-  Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
+          "\n enter '15'  [CHAPTER -6 Problem 6 ]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
+          "\n enter '16'  [CHAPTER - 5 Problem 1-  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
+          "\n enter '17'  [CHAPTER - 5 Problem 2-]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
           "\n enter '18' (INCORRECT)  [CHAPTER - 5 Problem 3- CHAPTER 5]  COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
           n #\n Reduced annual interest rate due to early withdrawal compounding_periods_per_year  \n# Monthly compounding"
           "\n enter '19'  [CHAPTER - 6 Problem 6- CHAPTER 5]  Find the Total return and determine the asset  Which is the safer investment?"
-          "\n enter '20'  [CHAPTER - 5 Problem 9- CHAPTER 5]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
-          "\n enter '21'  [CHATPER - 6 Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium"
-          "\n enter '22'  [CHAPTER - 6 Problem 5- CHAPTER 6]  Calculate the: UTILITY of a risky asset and risk-free assets (tbills) and Compare the two  \n")
+          "\n enter '20'  [CHAPTER - 5 Problem 9]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
+          "\n enter '21'  [CHATPER - 6 Problem 4]   how much will you be willing to pay for the portfolio?, given a risk premium"
+          "\n enter '22'  [CHAPTER - 6 Problem 5]  Calculate the: UTILITY of a risky asset and risk-free assets (tbills) and Compare the two  \n"
+          "\n enter '23'  [CHAPTER - 6 Problem 11A-]  Would you hould Asset A or Asset B, given expected return and standard deviation of both   \n"
+          "\n enter '24'  [CHAPTER - 7 Problem 15-]  Suppose you have a project that has a 0.7 chance of doubling your investment in a year and a 0.3 chance of halving your investment in a year. What is the standard deviation of the rate of return on this investment?on of both   \n"
+          "\n enter '25'  [CHAPTER - 7II Problem 1A-]  Compute the expected return and variance of an equally weighted portfolio.   \n"
+          "\n enter '26'  [CHAPTER - 7II Problem 2D]  CDescribe how you would find the expected return of a portfolio that lies on the CAPITAL allocation line (CAL) WHEN given standard deviatin and risk free rate  \n")
 
 
 
@@ -737,11 +813,9 @@ def main():
 
             print("**************************\nasset A input: \n Standard Deviation: ", asset_A.std_deviation, "Expected Return: ", asset_A.expected_return,
                   "\nasset B input: \n Standard Deviation: ", asset_B.std_deviation, "Expected Return: ", asset_B.expected_return,
-                  "\nT-bills input: \n Standard Deviation: ", t_bills.std_deviation, "Expected Return: ", t_bills.expected_return, "\n**************************")
+                  "\n input: \n Standard Deviation: ", t_bills.std_deviation, "Expected Return: ", t_bills.expected_return, "\n**************************")
 
-            # Calculate the correlation coefficient
-            coorelation = correlation_coeficant_calculation(asset_A, asset_B)
-            print("Correlation Coefficient: ", coorelation)
+
 
         except Exception as e:
             print(e)
@@ -991,27 +1065,75 @@ def main():
 
 
     if choice == '8':
-        print("\n\n[CHAPTER 6 - Question 15] [Sharp Ratio]You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
+        print("\n\n[CHAPTER 6 - Question 15 and 16] [Sharp Ratio] [Reward to Volitility Ratio] [SLOPE OF CAL] You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
         try:
             t_bills = get_asset_input("T-bills")
             asset_A = get_asset_input("Asset A")
 
             sharpe_ratio = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+
+            # Calculate the slope of the CAL
+            slope_CAL = (asset_A.expected_return - t_bills.expected_return) / asset_A.std_deviation
+
+            # Generate a range of standard deviations (sigma) for plotting the CAL
+            sigma_values = np.linspace(0, 0.30, 100)  # From 0% to 30% standard deviation
+
+            risky_portfolio_variance = asset_A.std_deviation ** 2  # Variance of the risky portfolio
+            y_star = (asset_A.expected_return - t_bills.expected_return) / (sharp_ratio * risky_portfolio_variance)
+            expected_return_client = t_bills.expected_return + y_star * (asset_A.expected_return - t_bills.expected_return)
+            standard_deviation_client = y_star * asset_A.std_deviation
+            expected_returns_CAL = t_bills.expected_return + slope_CAL * sigma_values             # Calculate the corresponding expected returns on the CAL
+
+
             print(f"\n [ANSWER] \nSharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
+            print(f"\n [ANSWER] Slope of the CAL: {slope_CAL:.4f}")
+            print("\n\n[ANSWER] The call expected returns are: ", expected_returns_CAL)
+            print("\n\n[ANSWER] The risky portfoio variance is: ", risky_portfolio_variance)
+            print(f"\n[ANSWER] The expected return of the client's optimal portfolio is: {expected_return_client:.4f}")
+            print(f"\n[ANSWER] The standard deviation of the client's optimal portfolio is: {standard_deviation_client:.4f}")
+            print(f"\n[ANSWER] The proportion of the risky portfolio to the complete portfolio is: {y_star:.4f}")
+            print(f"\n[ANSWER] The proportion of the T-bills to the complete portfolio is: {1 - y_star:.4f}")
+
+
+
+            # Plotting the CAL
+            plt.figure(figsize=(10, 6))
+            plt.plot(sigma_values, expected_returns_CAL, label='Capital Allocation Line (CAL)', color='blue')
+
+            # Plot the risky portfolio point
+            plt.scatter(standard_deviation_risky, expected_return_risky, color='red', label='Risky Portfolio')
+
+            # Plot the client's position on the CAL
+            plt.scatter(standard_deviation_client, expected_return_client, color='green',
+                        label='Client\'s Optimal Portfolio')
+
+            # Formatting the plot
+            plt.title('Capital Allocation Line (CAL) and Client\'s Optimal Portfolio')
+            plt.xlabel('Standard Deviation (σ)')
+            plt.ylabel('Expected Return (E[r])')
+            plt.grid(True)
+            plt.legend()
+
+            # Show the plot
+            plt.show()
+
+
+
+
 
         except Exception as e:
             print(e)
             print(traceback.print_exc())
 
     if choice == '9':
-        print("\n\n[Question 17] You have chosen to find 'Y', the proportion of the risky portfolio given a specific rate of return to the complete portfolio")
+        print("\n\n[CHAPTER 6 - Question 17A] You have chosen to find 'Y', the proportion of the risky portfolio given a specific rate of return to the complete portfolio")
         try:
-            target_return = float(input("Enter the target rate of return: [this will be used to find the optimal portolio) "))
+            target_return = float(input("\nEnter the target rate of return: [this will be used to find the optimal portolio) "))
             asset_A = get_asset_input("Asset A")
             t_bills = get_asset_input("T-bills")
 
             proportion_y = calculate_proportion_y(target_return, asset_A.expected_return, t_bills.expected_return)
-            print(f"The proportion of the risky portfolio to the complete portfolio is: {proportion_y:.4f}")
+            print(f"\n[ANSWER] \nThe proportion of the risky portfolio to the complete portfolio is: {proportion_y * 100:.4f}%")
 
         except Exception as e:
             print(e)
@@ -1118,8 +1240,8 @@ def main():
 
 
     if choice == '15':
-        print("\n\n[Question 6] calculate expected return for given utility level and "
-              "plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.")
+        print("\n\n[CHAPTER 6 -Question 6] calculate expected return for given utility level and "
+              "plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.\n")
         try:
             asset_A = get_asset_input("Asset A")
             t_bills = get_asset_input("T-bills")
@@ -1393,6 +1515,202 @@ def main():
         except Exception as e:
             print(e)
             print(traceback.print_exc())
+
+    if choice == '23':
+        print("\n\n[CHAPTER - 6 Problem 11A-]  Would you hould Asset A or Asset B, given expected return and standard deviation of both.\n")
+        try:
+            #  asset_A, asset_B, t_bills = asset_input()
+            asset_A = get_asset_input("Asset A")
+            asset_B = get_asset_input("Asset B")
+
+            correlation = correlation_coeficant_calculation(asset_A, asset_B)
+
+            # Calculate the correlation coefficient
+            corr = asset_A.std_deviation - asset_B.std_deviation
+            covariance = corr * asset_A.std_deviation * asset_B.std_deviation
+
+            for w_stocks, w_gold in zip(weights_stocks, weights_gold):
+                # Portfolio expected return
+                portfolio_return = w_stocks * asset_A.expected_return + (w_gold * asset_B.expected_return)
+                portfolio_returns.append(portfolio_return)
+
+                # Portfolio variance
+                portfolio_variance = (
+                        (w_stocks * asset_A.std_deviation) ** 2 +
+                        (w_gold * asset_B.std_deviation) ** 2 +
+                        2 * w_stocks * w_gold * covariance
+                )
+                portfolio_risk = np.sqrt(portfolio_variance)
+                portfolio_risks.append(portfolio_risk)
+
+
+            # Calculate the Sharpe ratio of the optimal portfolio
+            print("[ANSWER] \n PORTFOLIO_RISK: ", portfolio_risks)
+            print("\nCorrelation Coefficient: ", corr)
+            print(f"\n\n[ANSWER] The correlation coefficient between the two assets is: {correlation}")
+            print("\nCovariance: ", covariance)
+
+
+
+
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '24':
+        print("\n\n[CHAPTER - 6 Problem 11B-]  Would you hould Asset A or Asset B, given expected return and standard deviation of both.\n")
+
+        try:
+
+            # Input the number of possible outcomes
+            num_outcomes = int(input("Enter the number of possible outcomes: "))
+            if num_outcomes <= 0:
+                print("The number of outcomes must be a positive integer.")
+                exit()
+
+            rates_of_return = []
+            probabilities = []
+
+            print(
+                "\n\nEnter the rates of return (as percentages, e.g., 100 for doubling, -50 for halving) and their corresponding probabilities.")
+
+            # Input rates of return and probabilities
+            for i in range(1, num_outcomes + 1):
+                rate = float(input(f"\nEnter rate of return for outcome {i} (e.g., 100 for +100%): "))
+                # Convert percentage to decimal
+                rate_decimal = rate / 100
+                rates_of_return.append(rate_decimal)
+
+            for i in range(1, num_outcomes + 1):
+                prob = float(input(f"\nEnter probability for outcome {i} (as a decimal between 0 and 1): "))
+                if prob < 0 or prob > 1:
+                    print("Probability must be between 0 and 1.")
+                    exit()
+                probabilities.append(prob)
+
+            # Check if probabilities sum to 1
+            total_probability = sum(probabilities)
+            if not math.isclose(total_probability, 1.0, rel_tol=1e-6):
+                print(
+                    f"\nError: The probabilities must sum to 1. The sum of probabilities entered is {total_probability}.")
+
+            # Step 1: Calculate the expected rate of return
+            # Step 2: Calculate the variance
+            # Step 3: Calculate the standard deviation
+            # expected_return = calculate_expected_return00(rates_of_return, probabilities)
+           # variance2 = calculate_variance00(rates_of_return, probabilities, expected_return)
+            # standard_deviation = math.sqrt(variance)
+
+
+            mean = (probabilities[0] * rates_of_return[0]) + (probabilities[1] * rates_of_return[1])
+            variance = (((probabilities[0] * rates_of_return[0] - mean) ** 2) + ((probabilities[1] * rates_of_return[1] - mean) ** 2))
+            standard_deviation = math.sqrt(variance)
+
+            print(f"\n\n[ANSWER] \n Mean: {mean * 100:.4f}%")
+            print(f"\n [Answer] \n [WRONG] Variance: {variance * 100 :.4f}%")
+          #  print(f"\n [Answer] \n [WRONG] Variance2: {variance2 * 100 :.4f}%")
+
+            print(f"\n [Answer] \n Standard Deviation: {standard_deviation * 100:.4f}%")
+
+
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+
+    if choice == '25':
+        print("\n\n[CHAPTER - 7II Problem 1A-]  Compute the expected return and variance of an equally weighted portfolio..")
+        try:
+            print("\nCompute the expected return and variance of an equally weighted portfolio.\n")
+            try:
+                num_stocks = int(input("Enter the number of stocks in the portfolio: "))
+                if num_stocks <= 0:
+                    print("The number of stocks must be a positive integer.")
+                    exit()
+            except ValueError:
+                print("Invalid input. Please enter an integer value for the number of stocks.")
+                exit()
+
+            # Get expected returns from the user
+            expected_returns = get_expected_returns(num_stocks)
+            stock_symbols = list(expected_returns.keys())
+
+            # Get the covariance matrix from the user
+            covariance_matrix = get_covariance_matrix(num_stocks, stock_symbols)
+
+            # Equally weighted portfolio weights
+            weights = np.array([1 / num_stocks] * num_stocks)
+
+            # Convert expected returns to a NumPy array
+            expected_returns_array = np.array(list(expected_returns.values()))
+
+            # Compute the expected return of the portfolio
+            portfolio_expected_return = np.dot(weights, expected_returns_array)
+
+            # Compute the variance of the portfolio
+            portfolio_variance = np.dot(weights.T, np.dot(covariance_matrix, weights))
+
+            # Compute the standard deviation of the portfolio
+            portfolio_std_dev = np.sqrt(portfolio_variance)
+
+            # Display the results
+            print("\n[ANSWER]\n Equally Weighted Portfolio Results:")
+            print(f"\n[ANSWER]\nExpected Return: {portfolio_expected_return * 100:.2f}%")
+            print(f"\n[ANSWER]\nVariance: {portfolio_variance:.5f}")
+            print(f"\n[ANSWER]\nStandard Deviation: {portfolio_std_dev * 100:.2f}%")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '26':
+        print("\n\n[CHAPTER - 7II Problem 2D]  CDescribe how you would find the expected return of a portfolio that lies on the CAPITAL allocation line (CAL) WHEN given standard deviatin and risk free rate \n")
+        print("Compute the expected return of a portfolio on the Capital Allocation Line (CAL).\n")
+
+        # Get user inputs
+        try:
+            # Risk-free rate
+            R_f_input = float(input("Enter the risk-free rate (as a percentage, e.g., 3 for 3%): "))
+            R_f = R_f_input / 100
+
+            # Expected return of the risky portfolio
+            E_Rm_input = float(
+                input("Enter the expected return of the risky portfolio (as a percentage, e.g., 15 for 15%): "))
+            E_Rm = E_Rm_input / 100
+
+            # Standard deviation of the risky portfolio
+            sigma_m_input = float(input(
+                "Enter the standard deviation of the risky portfolio (as a percentage, e.g., 24.37 for 24.37%): "))
+            sigma_m = sigma_m_input / 100
+
+            # Standard deviation of the portfolio on the CAL
+            sigma_p_input = float(
+                input("Enter the standard deviation of the portfolio on the CAL (as a percentage, e.g., 20 for 20%): "))
+            sigma_p = sigma_p_input / 100
+        except ValueError:
+            print("Invalid input. Please enter numerical values.")
+            return
+
+        # Validate inputs
+        if sigma_m <= 0 or sigma_p < 0:
+            print("Standard deviations must be positive numbers.")
+            return
+        if R_f < 0 or E_Rm < 0:
+            print("Interest rates must be non-negative.")
+            return
+
+        # Compute the expected return on the CAL
+        E_Rp = compute_expected_return_CAL(R_f, E_Rm, sigma_m, sigma_p)
+
+        # Display the results
+        print("\n[ANSWER]\n:")
+        print(f"\n[ANSWER]\nRisk-Free Rate (R_f): {R_f_input:.2f}%")
+        print(f"\n[ANSWER]\nExpected Return of Risky Portfolio (E[R_m]): {E_Rm_input:.2f}%")
+        print(f"\n[ANSWER]\nStandard Deviation of Risky Portfolio (σ_m): {sigma_m_input:.2f}%")
+        print(f"\n[ANSWER]\nStandard Deviation of Portfolio on CAL (σ_p): {sigma_p_input:.2f}%")
+        print(f"\n[ANSWER]\nExpected Return of Portfolio on CAL (E[R_p]): {E_Rp * 100:.2f}%")
 
 if __name__ == '__main__':
     main()
