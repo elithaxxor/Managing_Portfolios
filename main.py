@@ -602,8 +602,66 @@ def calculate_ear_continuous(apr):
     return ear
 
 
+######################
+'''' [CHAPTER 5- QUESTION 3] COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given:'''
+
+# Function to calculate future value with compound interest
+def future_value(principal, annual_rate, years, compounds_per_year):
+    total_periods = years * compounds_per_year
+    rate_per_period = annual_rate / compounds_per_year
+    fv = principal * (1 + rate_per_period) ** total_periods
+    return fv
+
 ####################
 
+''' [CHAPTER 5- QUESTION 4] Find the Total return and determine the asset  Which is the safer investment?'''
+# Function to compare investments based on expected inflation rate
+
+def compare_investments(principal, conventional_rate, inflation_plus_base_rate):
+    inflation_rate = float(input("Enter the expected inflation rate (as a percentage, e.g., 3 for 3%): ")) / 100
+
+    # Calculate total rates
+    inflation_plus_total_rate = inflation_plus_base_rate + inflation_rate
+
+    # Future Values
+    fv_conventional = principal * (1 + conventional_rate)
+    fv_inflation_plus = principal * (1 + inflation_plus_total_rate)
+
+    # Real Returns
+    real_return_conventional = conventional_rate - inflation_rate
+    real_return_inflation_plus = inflation_plus_total_rate - inflation_rate
+
+    # Display the results
+    print(f"\nFuture Value of Conventional CD: ${fv_conventional:,.2f}")
+    print(f"Future Value of Inflation-Plus CD: ${fv_inflation_plus:,.2f}")
+
+    print(f"Real Return of Conventional CD: {real_return_conventional * 100:.2f}%")
+    print(f"Real Return of Inflation-Plus CD: {real_return_inflation_plus * 100:.2f}%")
+
+    if fv_conventional > fv_inflation_plus:
+        print("\n[ANSWER] The Conventional CD is the better investment based on expected returns.")
+    else:
+        print("\n[ANSWER] The Inflation-Plus CD is the better investment based on expected returns.")
+
+
+
+#########################
+
+
+''' [CHAPTER 5- QUESTION 9] Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio.'''
+def calculate_mean01(values, probabilities):
+    mean = sum(value * prob for value, prob in zip(values, probabilities))
+    print("mean: ", mean)
+    return mean
+
+# Function to calculate variance
+def calculate_variance01(values, probabilities, mean):
+    variance = sum(((value - mean) ** 2) * prob for value, prob in zip(values, probabilities))
+    print("variance: ", variance)
+    return variance
+
+
+##########################
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
     asset_A = get_asset_input("Asset A")
@@ -637,19 +695,25 @@ def main():
           "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
           "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
           "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
-            "\n enter '11' [Problem 28A] r[eward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio"
-          "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year"
-          "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, "
-          "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate."
-          "\n enter '14'  [Problem 5] Calculate the [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. "
-          "\n enter '15'  [Problem 6]  plot the [indifference curve] by calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P ."
-          "\n enter '16'  [Problem 1- CHAPTER 5]  Calculate the EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
-          "\n enter '17'  [Problem 2- CHAPTER 5]  Calculate Effective Annual Rate (Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .")
+            "\n enter '11' [Problem 28A] r[eward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio\n"
+          "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
+          "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, \n"
+          "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate.\n"
+          "\n enter '14'  [Problem 5] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
+          "\n enter '15'  [Problem 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
+          "\n enter '16'  [Problem 1- CHAPTER 5]  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
+          "\n enter '17'  [Problem 2- CHAPTER 5]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
+          "\n enter '18' (INCORRECT)  [Problem 3- CHAPTER 5]  COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
+          n #\n Reduced annual interest rate due to early withdrawal compounding_periods_per_year  \n# Monthly compounding"
+          "\n enter '19'  [Problem 6- CHAPTER 5]  Find the Total return and determine the asset  Which is the safer investment?"
+          "\n enter '20'  [Problem 9- CHAPTER 5]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
+          "\n enter '21'  [Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium")
+
 
 
 
     choice = input("Enter your choice: ")
-    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']:
+    if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20','21','22','23','24','25','26','27','28','29','30']:
         print("\nInvalid choice. Please enter a valid choice.\n")
         main()
 
@@ -1133,6 +1197,126 @@ def main():
         except Exception as e:
             print(e)
             print(traceback.print_exc())
+
+    if choice == '18':
+        print("\n\n[CHAPTER 5- Question 3] COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
+          n #\n Reduced annual interest rate due to early withdrawal compounding_periods_per_year  \n# Monthly compounding")
+        try:
+            # Get user inputs
+            P = float(input("Enter the initial principal amount in dollars: "))
+            original_rate = float(
+                input("Enter the original annual interest rate (as a percentage, e.g., 5 for 5%): ")) / 100
+            penalty_rate = float(input(
+                "Enter the penalty annual interest rate due to early withdrawal (as a percentage, e.g., 4 for 4%): ")) / 100
+            compounding_periods_per_year = int(
+                input("Enter the number of compounding periods per year (e.g., 12 for monthly): "))
+            total_years = float(input("Enter the total original investment period in years: "))
+            years_elapsed = float(input("Enter the number of years already invested: "))
+
+            # Calculate remaining years
+            years_remaining = total_years - years_elapsed
+
+            print("\nCalculating the future value if you withdraw now, and the future value with the penalty incured and the ratio between the two \n ")
+            FV_original = future_value(P, original_rate, total_years, compounding_periods_per_year)
+            FV_penalty = future_value(P, penalty_rate, years_remaining, compounding_periods_per_year)
+            k = FV_original / FV_penalty
+            # Number of compounding periods remaining
+            n_remaining = years_remaining * compounding_periods_per_year
+            # Avoid division by zero if years_remaining is zero
+            if n_remaining == 0:
+                print("No remaining investment period. The new interest rate cannot be calculated.")
+            else:
+                rate_per_period_new = k ** (1 / n_remaining) - 1
+                R_new = rate_per_period_new * compounding_periods_per_year  # Annual rate
+                R_new_percentage = R_new * 100
+
+                print(f"\nFuture Value of the original CD after {total_years} years: ${FV_original:.2f}")
+                print(f"Amount after early withdrawal with penalty rate: ${FV_penalty:.2f}")
+                print(f"Minimum new annual interest rate needed: {R_new_percentage:.4f}%")
+
+                # Verification: Calculate the future value with the new rate to confirm it matches FV_original
+                FV_new = future_value(FV_penalty, R_new / 100, years_remaining, compounding_periods_per_year)
+                print(f"Future Value after reinvesting at new rate: ${FV_new:.2f}")
+                print(f"Difference between original and new future values: ${FV_new - FV_original:.2f}")
+
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '19':
+        print("\n\n[CHAPTER 5- Question 6] Find the Total return and determine the asset  Which is the safer investment?")
+
+        try:
+            principal = float(input("Enter the initial investment amount in dollars: "))
+            conventional_cd_rate = float(input(
+                "Enter the annual interest rate for the Conventional CD (as a percentage, e.g., 5 for 5%): ")) / 100
+            inflation_plus_cd_rate = float(
+                input("Enter the base rate for the Inflation-Plus CD (as a percentage, e.g., 1.5 for 1.5%): ")) / 100
+            inflation_rate = float(input("Enter the expected inflation rate (as a percentage, e.g., 3 for 3%): ")) / 100
+            compare_investments(principal, conventional_cd_rate, inflation_plus_cd_rate)
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+    if choice == '20':
+        print("\n\n[CHAPTER 5- Question 9] Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio.")
+        try:
+            # Get user inputs
+            # Get user input for rates of return and probabilities
+            values = []
+            probabilities = []
+
+            print("Enter the three possible rates of return and their corresponding probabilities.")
+
+            # Input values of q
+            for i in range(1, 4):
+                try:
+                    value = float(input(f"Enter value q{i}: "))
+                    values.append(value)
+                except ValueError:
+                    print("Invalid input. Please enter a numerical value.")
+                    exit()
+
+            # Input probabilities
+            for i in range(1, 4):
+                try:
+                    prob = float(input(f"Enter probability for q{i} (as a decimal between 0 and 1): "))
+                    if 0 <= prob <= 1:
+                        probabilities.append(prob)
+                    else:
+                        print("Probability must be between 0 and 1.")
+                        exit()
+                except ValueError:
+                    print("Invalid input. Please enter a numerical value.")
+                    exit()
+
+            # Check if probabilities sum to 1
+            if not math.isclose(sum(probabilities), 1.0):
+                print("\nError: The probabilities must sum to 1.")
+            else:
+                # Calculate mean
+                mean_q = calculate_mean01(values, probabilities)
+
+                # Calculate variance
+                variance_q = calculate_variance01(values, probabilities, mean_q)
+
+                # Calculate standard deviation
+                std_deviation_q = math.sqrt(variance_q)
+
+                # Display results
+                print(f"\nValues of q: {values}")
+                print(f"\nProbabilities: {probabilities}\n")
+                print(f"\nExpected Value (Mean) E(q): {mean_q:.4f}")
+                print(f"\nVariance Var(q): {variance_q:.4f}")
+                print(f"\nStandard Deviation σ(q): {std_deviation_q:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    
+
 
 if __name__ == '__main__':
     main()
