@@ -686,29 +686,29 @@ def main():
     print("\nWelcome to the Portfolio Optimization Tool!\n "
           "\n3enter '1' if you like to calculate the optimal portfolio weights for assets A and B, and the expected return "
           "and standard deviation of the optimal portfolio?"
-          "\n enter '2' [Problem 16] Calculate CALs slope, and draw grapsh "
+          "\n enter '2' [CHAPTER - 6 Problem 16] Calculate CALs slope, and draw grapsh "
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
           "\n enter '4' Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
           "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
-          "\n enter '6' [Problem 13] to calculate the Expected rate of return, given 1 asset and Risk free asset "
-          "\n enter '7' [Problem 14] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
-          "\n enter '8' [Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
-          "\n enter '9' [Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
+          "\n enter '6' [CHAPTER - 6 Problem 13- CHAPTER 6] to calculate the Expected rate of return, given 1 asset and Risk free asset "
+          "\n enter '7' [CHAPTER - 6 Problem 14 - CHAPTER 6]] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
+          "\n enter '8' [CHAPTER - 6 Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
+          "\n enter '9' [CHAPTER - 6 Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
           "\n enter '10' [Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
-            "\n enter '11' [Problem 28A] r[eward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio\n"
-          "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
+            "\n enter '11' [CHAPTER - 6 Problem 28A] [Reward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio\n"
+          "\n enter '12' [CHAPTER - 6 Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
           "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, \n"
           "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate.\n"
-          "\n enter '14'  [Problem 5- CHAPTER 6] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
-          "\n enter '15'  [Problem 6 -- Chapter 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
-          "\n enter '16'  [Problem 1- CHAPTER 5]  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
-          "\n enter '17'  [Problem 2- CHAPTER 5]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
-          "\n enter '18' (INCORRECT)  [Problem 3- CHAPTER 5]  COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
+          "\n enter '14'  [CHAPTER - 6 Problem 5- CHAPTER 6] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
+          "\n enter '15'  [CHAPTER -6 Problem 6 -- Chapter 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
+          "\n enter '16'  [CHAPTER - 5 Problem 1- CHAPTER 5]  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
+          "\n enter '17'  [CHAPTER - 5 Problem 2- CHAPTER 5]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
+          "\n enter '18' (INCORRECT)  [CHAPTER - 5 Problem 3- CHAPTER 5]  COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
           n #\n Reduced annual interest rate due to early withdrawal compounding_periods_per_year  \n# Monthly compounding"
-          "\n enter '19'  [Problem 6- CHAPTER 5]  Find the Total return and determine the asset  Which is the safer investment?"
-          "\n enter '20'  [Problem 9- CHAPTER 5]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
-          "\n enter '21'  [Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium"
-          "\n enter '22'  [Problem 5- CHAPTER 6]  Calculate the: UTILITY of a risky asset and risk-free assets (tbills) and Compare the two  \n")
+          "\n enter '19'  [CHAPTER - 6 Problem 6- CHAPTER 5]  Find the Total return and determine the asset  Which is the safer investment?"
+          "\n enter '20'  [CHAPTER - 5 Problem 9- CHAPTER 5]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
+          "\n enter '21'  [CHATPER - 6 Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium"
+          "\n enter '22'  [CHAPTER - 6 Problem 5- CHAPTER 6]  Calculate the: UTILITY of a risky asset and risk-free assets (tbills) and Compare the two  \n")
 
 
 
@@ -770,7 +770,7 @@ def main():
             t_bills = get_asset_input("T-bills")
 
             sharpe_ratio = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
-            print(f"Sharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
+            print(f"[ANSWER] \nSharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
 
             res = calculate_optimal_portfolio(asset_A, asset_B, t_bills)
             print("Weight of A in the optimal portfolio: ", res[0])
@@ -892,18 +892,20 @@ def main():
 
             sharp_ratio = calculate_sharpe_ratio(Portfolio.risky_portfolio_return, t_bills.expected_return, Portfolio.risky_portfolio_std_dev)
 
-            print("Correlation Coefficient: ", coorelation)
-            print("Sharpe Ratio: ", sharp_ratio)
+            print("\n[ANSWER]\n")
+
+            print("\nCorrelation Coefficient: ", coorelation)
+            print("\nSharpe Ratio: ", sharp_ratio)
             print(f"\n\nRisky Portfolio Return: {Portfolio.risky_portfolio_return * 100:.2f}%")
-            print(f"Risky Portfolio Standard Deviation: {Portfolio.risky_portfolio_std_dev * 100:.2f}%")
-            print(f"Risk-Free Rate: {risk_free_rate * 100:.2f}%")
-            print(f"Client's Weight in Risky Portfolio: {client_weight_in_risky * 100:.2f}%")
-            print(f"Proportion of Stock A: {proportion_stock_A * 100:.2f}%",
-                  "\nProportion of Stock B: {proportion_stock_B * 100:.2f}%",
-                  "\nProportion of Stock C: {proportion_stock_C * 100:.2f}%")
+            print(f"\nRisky Portfolio Standard Deviation: {Portfolio.risky_portfolio_std_dev * 100:.2f}%")
+            print(f"\nRisk-Free Rate: {risk_free_rate * 100:.2f}%")
+            print(f"\nClient's Weight in Risky Portfolio: {client_weight_in_risky * 100:.2f}%")
+            print(f"\nProportion of Stock A: {proportion_stock_A * 100:.2f}%",
+                  f"\nProportion of Stock B: {proportion_stock_B * 100:.2f}%",
+                  f"\nProportion of Stock C: {proportion_stock_C * 100:.2f}%")
             print(f"Total Proportion: {total_proportion * 100:.2f}%")
 
-            if risky_portfolio_return is not None:
+            try:
                 # Calculate the expected return of the client's portfolio
                 client_portfolio_return = risky_portfolio_return * client_weight_in_risky[0] + Portfolio.risk_free_rate * (
                             1 - Portfolio.client_weight_in_risky)
@@ -916,21 +918,25 @@ def main():
                 standard_deviation = calculate_portfolio_risk([proportion_stock_A, proportion_stock_B, proportion_stock_C])
                 correlation_coeficant_calculation(Portfolio.proportion_stock_A, Portfolio.proportion_stock_C)
 
-                print("Weight of B in the optimal portfolio: ", res[1])
-                print("Expected return of the optimal portfolio: ", res[2])
-                print("Standard deviation of the optimal portfolio: ", res[3])
+                print("[ANSWER] The correlation coefficient between the two assets is:", coorelation)
+                print("\nWeight of A in the optimal portfolio: ", res[0])
+                print("\nWeight of B in the optimal portfolio: ", res[1])
+                print("\nExpected return of the optimal portfolio: ", res[2])
+                print("\nStandard deviation of the optimal portfolio: ", res[3])
 
-                print("The expected return of the client's portfolio is:", client_portfolio_return)
-                print("The standard deviation of the client's portfolio is:", standard_deviation)
-                print("The Sharpe ratio of the client's portfolio is:", sharp_ratio)
+                print("\nThe expected return of the client's portfolio is:", client_portfolio_return)
+                print("\nThe standard deviation of the client's portfolio is:", standard_deviation)
+                print("\nThe Sharpe ratio of the client's portfolio is:", sharp_ratio)
 
-
+            except Exception as e:
+                print(e)
+                print(traceback.print_exc())
         except Exception as e:
                 print(e)
                 print(traceback.print_exc())
 
     if choice == '6':
-        print("[QUESTION 13] You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
+        print("\n[CHAPTER 6 - QUESTION 13] You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
         try:
           #  asset_A, asset_B, t_bills = asset_input()
             asset_A = get_asset_input("Asset A")
@@ -941,21 +947,21 @@ def main():
             expected_value = calculate_expected_value(t_bills, weight)
             std_deviation = calculate_standard_deviation(t_bills, asset_A, weight)
 
-            print("\nThe expected value of the rate of return on his portfolio is:", expected_value)
-            print("The standard deviation of the rate of return on his portfolio is:", std_deviation)
+            print("\n[ANSWER] \n The expected value of the rate of return on his portfolio is:", expected_value)
+            print("\n[ANSWER] \n The standard deviation of the rate of return on his portfolio is:", std_deviation)
 
         except ValueError as e:
             print(e)
             print(traceback.print_exc())
 
     if choice == '7':
-        print("\n\n[Question 14]You have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
+        print("\n\n[CHAPTER 6 - Question 14]You have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
         try:
 
             # asset_A = get_asset_input("Asset A")
             # asset_B = get_asset_input("Asset B")
             # t_bills = get_asset_input("T-bills")
-            client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%): "))
+            client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%)\n [REFER TO CHOICE:6 FOR CLIENT WEIGHT]: "))
             proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
             proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
             proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
@@ -973,8 +979,8 @@ def main():
             print("\nClient's Weight in Risky Portfolio: ", client_weight_in_risky)
 
 
-            print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: ", client_investment_A, "\nClient's Investment in Stock B: ", client_investment_B, "\nClient's Investment in Stock C: \n", client_investment_C,
-                  "\nClient's Investment in T-bills: ", client_investment_t_bills)
+            print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: ", client_investment_A * 100, "\nClient's Investment in Stock B: ", client_investment_B * 100, "\nClient's Investment in Stock C: \n", client_investment_C * 100,
+                  "\nClient's Investment in T-bills: ", client_investment_t_bills * 100)
 
             # Calculate the expected return of the client's portfolio
 
@@ -985,13 +991,13 @@ def main():
 
 
     if choice == '8':
-        print("\n\n[Question 15] [Sharp Ratio]You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
+        print("\n\n[CHAPTER 6 - Question 15] [Sharp Ratio]You have chosen to calculate the reward-to-volatility ratio (S) of the optimal risky portfolio")
         try:
             t_bills = get_asset_input("T-bills")
             asset_A = get_asset_input("Asset A")
 
             sharpe_ratio = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
-            print(f"Sharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
+            print(f"\n [ANSWER] \nSharpe Ratio (Reward-to-Volatility Ratio): {sharpe_ratio:.4f}")
 
         except Exception as e:
             print(e)
