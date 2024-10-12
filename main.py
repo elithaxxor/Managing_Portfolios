@@ -699,15 +699,16 @@ def main():
           "\n enter '12' [Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
           "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, \n"
           "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate.\n"
-          "\n enter '14'  [Problem 5] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
-          "\n enter '15'  [Problem 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
+          "\n enter '14'  [Problem 5- CHAPTER 6] Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
+          "\n enter '15'  [Problem 6 -- Chapter 6]  plot the [indifference curve] \nby calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .\n"
           "\n enter '16'  [Problem 1- CHAPTER 5]  Calculate the: \n EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
           "\n enter '17'  [Problem 2- CHAPTER 5]  Calculate Effective Annual Rate \n(Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .\n"
           "\n enter '18' (INCORRECT)  [Problem 3- CHAPTER 5]  COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given: \n # Initial principal amount in dollars original_rate \n  # Original annual interest rate (5%)\
           n #\n Reduced annual interest rate due to early withdrawal compounding_periods_per_year  \n# Monthly compounding"
           "\n enter '19'  [Problem 6- CHAPTER 5]  Find the Total return and determine the asset  Which is the safer investment?"
           "\n enter '20'  [Problem 9- CHAPTER 5]  Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio."
-          "\n enter '21'  [Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium")
+          "\n enter '21'  [Problem 4- CHAPTER 6]   how much will you be willing to pay for the portfolio?, given a risk premium"
+          "\n enter '22'  [Problem 5- CHAPTER 6]  Calculate the: UTILITY of a risky asset and risk-free assets (tbills) and Compare the two  \n")
 
 
 
@@ -1343,6 +1344,45 @@ def main():
             print(f"\n[ANSSWER 1D] The Combined cash flow is: {combined_cash_flow:.4f}")
 
             print(f"\nThe expected rate of return is: {expected_rate_of_return:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '22':
+        print("\n\n[CHAPTER 6- Question 5] Calculate the utility of a risky asset and a risk-free asset, and compare the two.\n")
+
+        try:
+            expected_return_risky = float(
+                input("Enter the expected return of the risky portfolio (as a percentage, e.g., 12 for 12%): ")) / 100
+            standard_deviation_risky = float(input(
+                "Enter the standard deviation of the risky portfolio (as a percentage, e.g., 18 for 18%): ")) / 100
+            expected_return_risk_free = float(
+                input("Enter the expected return of the risk-free asset (as a percentage, e.g., 7 for 7%): ")) / 100
+
+
+            standard_deviation_risky_squard = standard_deviation_risky ** 2
+            standard_deviation_risky_half = .05 * standard_deviation_risky_squard
+            delta = expected_return_risk_free - expected_return_risky
+            A = delta / (-standard_deviation_risky_half)
+            print(f"Step 4: A = {delta} / (-{standard_deviation_risky_half}) = {A}")
+            print(f"\nThe value of A is approximately: {A:.4f}")
+
+            left_side = expected_return_risky - 0.5 * A * standard_deviation_risky_squard
+
+            print(f"Step 3: delta = {delta}")
+
+            risky_utility = expected_return_risky - 0.5 * standard_deviation_risky ** 2
+            risk_free_utility = expected_return_risk_free - 0.5 * 0
+            risk_free_utility01 = expected_return_risk_free - 0.5 * A
+
+            print(f"\n[Answer 1A] The utility of the risky asset is: {risky_utility * 100 :.4f}")
+            print(f"\n[Answer 1B] The utility of the risk-free asset is: {risk_free_utility * 100 :.4f}")
+            print(f"\n[Answer 1C] The utility of the risk-free asset is: {risk_free_utility01 * 100 :.4f}")
+            print(f"\n[Answer 1E] Leftside: {left_side:.4f}")
+            print(f"\n[Answer 1D] The value of A is approximately:-- [THE MAXIMUM RISK AVERSION FOR RISK PORTFLIO] \n {A / 10:.4f}")
+
+
 
         except Exception as e:
             print(e)
