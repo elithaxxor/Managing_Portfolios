@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from dataclasses import dataclass
-import traceback, time
+import traceback, time, math
 
 from fontTools.misc.psLib import endofthingRE
 
@@ -156,7 +156,7 @@ def get_asset_input(asset_name):
 # Calculate correlation coefficient
 
 def correlation_coeficant_calculation(asset_A, asset_B):
-    # Calculate the covariance of A and B
+    # Calculate the ›ariance of A and B
     global correlation2, covariance_AB, correlation
     #correlation2 = (asset_A.std_deviation * asset_B.std_deviation)
 #    covariance_AB = np.cov(asset_A.expected_return, asset_B.expected_return)[0][1]
@@ -563,7 +563,46 @@ def expected_return_for_indifference_curve(U, A, std_dev):
     expected_return = U + A * std_dev
     print("expected_return: ", expected_return)
     return U + A * std_dev
+##########################
 
+''' [CHAPTER 5- QUESTION 1] Calculate the EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate.'''
+# Function to calculate future value with Effective Annual Rate (EAR)
+def calculate_ear(principal, annual_rate, years):
+    A_EAR = principal * (1 + annual_rate) ** years
+    return A_EAR
+
+# Function to calculate future value with Quarterly APR
+def calculate_quarterly_apr(principal, annual_rate, years):
+    compounds_per_year_quarterly = 4
+    rate_per_period_quarterly = annual_rate / compounds_per_year_quarterly
+    total_periods_quarterly = years * compounds_per_year_quarterly
+    A_quarterly = principal * (1 + rate_per_period_quarterly) ** total_periods_quarterly
+    return A_quarterly
+
+# Function to calculate future value with Monthly APR
+def calculate_monthly_apr(principal, annual_rate, years):
+    compounds_per_year_monthly = 12
+    rate_per_period_monthly = annual_rate / compounds_per_year_monthly
+    total_periods_monthly = years * compounds_per_year_monthly
+    A_monthly = principal * (1 + rate_per_period_monthly) ** total_periods_monthly
+    return A_monthly
+
+
+
+######################
+''' [CHAPTER 5- QUESTION 2] Calculate Effective Annual Rate (Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .'''
+
+# Function to calculate EAR for discrete compounding
+def calculate_ear(apr, compounding_periods_per_year):
+    ear = (1 + apr / compounding_periods_per_year) ** compounding_periods_per_year - 1
+    return ear
+# (e) Continuous Compounding
+def calculate_ear_continuous(apr):
+    ear = math.exp(apr) - 1
+    return ear
+
+
+####################
 
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -603,7 +642,9 @@ def main():
           "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, "
           "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate."
           "\n enter '14'  [Problem 5] Calculate the [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. "
-          "\n enter '15'  [Problem 6]  plot the [indifference curve] by calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P .")
+          "\n enter '15'  [Problem 6]  plot the [indifference curve] by calculating the expected return  r_P  for different values of  \sigma_P  (the standard deviation) and plot  r_P  against  \sigma_P ."
+          "\n enter '16'  [Problem 1- CHAPTER 5]  Calculate the EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate."
+          "\n enter '17'  [Problem 2- CHAPTER 5]  Calculate Effective Annual Rate (Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .")
 
 
 
@@ -646,7 +687,7 @@ def main():
         plot_cal(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
 
     # NOTE: OPTION 1-- Calculate the optimal portfolio weights for assets A and B
-    elif choice == '2':
+    if choice == '2':
         print("[QUESTION 16] You have chosen to Draw the CAL of your portfolio on an expected return–standard deviation diagram. Find CALs slope.")
         try:
             # Calculate the optimal portfolio weights for assets A and B
@@ -1036,6 +1077,62 @@ def main():
             print(e)
             print(traceback.print_exc())
 
+    if choice == '16':
+        print("\n\n[CHAPTER 5- Question 1] Calculate the EAR, Quarterly APR, and monthly APR, when given a principal, time horizon and interest rate.")
+        try:
+
+            # Ask the user for input
+            principal = float(input("Enter the initial investment amount (principal) in dollars: "))
+            years = float(input("Enter the investment period in years: "))
+            annual_rate = float(input("Enter the annual interest rate (as a percentage, e.g., 5 for 5%): ")) / 100
+
+            print("\nCalculating future values...\n")
+
+            # Calculate future values using the functions
+            A_EAR = calculate_ear(principal, annual_rate, years)
+            print(f"\n(a) Future Value with EAR: ${A_EAR:.2f}")
+
+            A_quarterly = calculate_quarterly_apr(principal, annual_rate, years)
+            print(f"(b)\n Future Value with Quarterly APR: ${A_quarterly:.2f}")
+
+            A_monthly = calculate_monthly_apr(principal, annual_rate, years)
+            print(f"(c)\n Future Value with Monthly APR: ${A_monthly:.2f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
+    if choice == '17':
+
+        try:
+            print("\n\n[CHAPTER 5- Question 2] Calculate Effective Annual Rate (EAR) when given a FIXED APR.")
+
+            apr_percentage = float(input("\nENTER THE apr: : "))
+            apr_decimal = apr_percentage / 100  # Convert APR to decimal form
+
+            '''COMPOUNDING RATESS: '''
+            compounding_periods_annual = 1 # Annual compounding
+            compounding_periods_monthly = 12 # Monthly compounding
+            compounding_periods_weekly = 52 # Weekly compounding
+            compounding_periods_daily = 365 # Daily compounding
+
+            ''' Calculate EAR for different compounding frequencies '''
+            ear_annual = calculate_ear(apr_decimal, compounding_periods_annual)
+            ear_monthly = calculate_ear(apr_decimal, compounding_periods_monthly)
+            ear_weekly = calculate_ear(apr_decimal, compounding_periods_weekly)
+            ear_daily = calculate_ear(apr_decimal, compounding_periods_daily)
+
+            ear_continuous = calculate_ear_continuous(apr_decimal)
+
+            print(f"\n\n(a) EAR with Annual Compounding: {ear_annual * 100:.4f}")
+            print(f"\n\n(b) EAR with Monthly Compounding: {ear_monthly * 100:.4f}")
+            print(f"\n\n(c) EAR with Weekly Compounding: {ear_weekly * 100:.4f}")
+            print(f"\n\n(d) EAR with Daily Compounding: {ear_daily *100:.4f}")
+            print(f"\n\n(e) EAR with Continuous Compounding: {ear_continuous * 100:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
 
 if __name__ == '__main__':
     main()
