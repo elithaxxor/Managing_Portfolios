@@ -572,7 +572,7 @@ def expected_return_for_indifference_curve(U, A, std_dev):
 
 ''' [CHAPTER 5- QUESTION 1] Calculate the EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate.'''
 # Function to calculate future value with Effective Annual Rate (EAR)
-def calculate_ear(principal, annual_rate, years):
+def calculate_ear01(principal, annual_rate, years):
     A_EAR = principal * (1 + annual_rate) ** years
     return A_EAR
 
@@ -895,6 +895,21 @@ def calculate_optimal_risky_portfolio(E_Ra, E_Rb, sigma_a, sigma_b, rho_ab, R_f)
 
 
 ################################################################################
+'''
+    [CHAPTER - 6 Problem 6]  
+    Calculate the expected return for a given utility level and risk aversion coefficient.
+    :param utility_level: The utility level of the investor.
+    :param risk_aversion: The risk aversion coefficient of the investor.
+    :return: The expected return for the indifference curve.
+'''
+def calculate_expected_return(utility_level, risk_aversion):
+
+    # Calculate the expected return for the indifference curve
+    expected_return = utility_level + 0.5 * risk_aversion
+    return expected_return
+
+################################################################################
+
 
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -912,6 +927,7 @@ def asset_input():
           "\nT-bills input: \n Standard Deviation: ", t_bills.std_deviation, "Expected Return: ", t_bills.expected_return, "\n**************************")
 
     return asset_A, asset_B, t_bills
+
 
 
 def main():
@@ -946,7 +962,8 @@ def main():
           "\n enter '23'  [CHAPTER - 6 Problem 11A-]  Would you hould Asset A or Asset B, given expected return and standard deviation of both   \n"
           "\n enter '24'  [CHAPTER - 7 Problem 15-]  Suppose you have a project that has a 0.7 chance of doubling your investment in a year and a 0.3 chance of halving your investment in a year. What is the standard deviation of the rate of return on this investment?on of both   \n"
           "\n enter '25'  [CHAPTER - 7II Problem 1A-]  Compute the expected return and variance of an equally weighted portfolio.   \n"
-          "\n enter '26'  [CHAPTER - 7II Problem 2D]  CDescribe how you would find the expected return of a portfolio that lies on the CAPITAL allocation line (CAL) WHEN given standard deviatin and risk free rate  \n")
+          "\n enter '26'  [CHAPTER - 7II Problem 2D]  CDescribe how you would find the expected return of a portfolio that lies on the CAPITAL allocation line (CAL) WHEN given standard deviatin and risk free rate  \n"
+          "\n enter '27'  [CHAPTER - 6 Problem 6] Find the expected return for given utility level and plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.")
 
 
 
@@ -1031,23 +1048,23 @@ def main():
            # cal_slope2 = calculate_cal_slope(optimal_expected_return02 * 100, t_bills.expected_return * 100 , optimal_portfolio_standard_deviation_02 * 100)
 
             print("\n\n[ANSWER- PART 4] - Find the slope CAL supported by T-Bills and Portoflio P \n\n", "CAL Slope: ",
-                  cal_slope, "CAL Slope2: ")
+                  cal_slope)
 
 
 
-            #
-            #
-            # '''
-            #     calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation.
-            # '''
-            #
-            # correlation_coefficient = calculate_correlation_coefficient(asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
-            #                                                 asset_B.std_deviation, asset_weight_A, portfolio_standard_deviation)
 
 
-            # print("\n\n[ANSWER- PART 3] - Calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation."
-            #       " \nCorrelation Coefficient: ", correlation_coefficient)
-            #
+            '''
+                calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation.
+            '''
+
+            correlation_coefficient = calculate_correlation_coefficient(asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
+                                                            asset_B.std_deviation, asset_weight_A, portfolio_standard_deviation)
+
+
+            print("\n\n[ANSWER- Coorelation Coeficiant 3] - Calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation."
+                  " \nCorrelation Coefficient: ", correlation_coefficient)
+
 
 
         except Exception as e:
@@ -1517,7 +1534,7 @@ def main():
             print("\nCalculating future values...\n")
 
             # Calculate future values using the functions
-            A_EAR = calculate_ear(principal, annual_rate, years)
+            A_EAR = calculate_ear01(principal, annual_rate, years)
             print(f"\n(a) Future Value with EAR: ${A_EAR:.2f}")
 
             A_quarterly = calculate_quarterly_apr(principal, annual_rate, years)
@@ -1681,7 +1698,7 @@ def main():
 
     if choice == '21':
         try:
-            print("\n\n[CHAPTER 6- Question 4] Calculate the present value of the portfolio, given a risk premium.")
+            print("\n\n[CHAPTER 6- Question 4] Consider alterantives to risky portoflio , calculate expected cash flow, Calculate the present value of the portfolio, given a risk premium given 2 expected cash flows.")
             # Get user inputs
             min_cash_flow = float(input("Enter the minimum expected cash flow: "))
             max_cash_flow = float(input("Enter the maximum expected cash flow: "))
@@ -1691,6 +1708,7 @@ def main():
 
             #t_bills = get_asset_input("T-bills")
 
+
             required_return = (risk_free_rate + risk_premium) * 100
             expected_cash_flow = (probability * min_cash_flow) + (probability * max_cash_flow)
             expected_cash_flow2 = risk_free_rate + risk_premium
@@ -1699,19 +1717,20 @@ def main():
             present_value = expected_cash_flow / (1 + required_return)
             expected_rate_of_return = calculate_expected_rate_of_return(expected_cash_flow, present_value)
 
-            print(f"\n[Answer 1A] The required return is: {required_return:.4f}")
-            print(f"\n[Answer 1B] \nThe present value of the portfolio is: {present_value:.4f}")
-            print(f"\n[Answer 1C] The expected cash flow is: {expected_cash_flow:.4f}")
-            print(f"\n[ANSSWER 1D] The Combined cash flow is: {combined_cash_flow:.4f}")
+            print(f"\n[Answer 1B] The expected cash flow E[p1]: ${expected_cash_flow:.4f}")
+            print(f"[Answer 1C] The required return is E[r]: {required_return:.2f}%")
+            print(f"[Answer 1D] The Combined cash flow p[0]: ${combined_cash_flow:.2f}")
+            print(f"[Answer 1E] The expected rate of return is: {expected_rate_of_return:.2f}")
+           # print(f"[Answer 1B] The present value of the portfolio is: {present_value:.2f}%")
 
-            print(f"\nThe expected rate of return is: {expected_rate_of_return:.4f}")
+
 
         except Exception as e:
             print(e)
             print(traceback.print_exc())
 
     if choice == '22':
-        print("\n\n[CHAPTER 6- Question 5] Calculate the utility of a risky asset and a risk-free asset, and compare the two.\n")
+        print("\n\n[CHAPTER 6- Question 5] Risk Aversion - Calculate the utility of a risky asset and a risk-free asset, and compare the two.\n")
 
         try:
             expected_return_risky = float(
@@ -1733,16 +1752,12 @@ def main():
 
             print(f"Step 3: delta = {delta}")
 
-            risky_utility = expected_return_risky - 0.5 * standard_deviation_risky ** 2
+            risky_utility = (expected_return_risky) - (0.5 * (standard_deviation_risky ** 2))
             risk_free_utility = expected_return_risk_free - 0.5 * 0
-            risk_free_utility01 = expected_return_risk_free - 0.5 * A
 
-            print(f"\n[Answer 1A] The utility of the risky asset is: {risky_utility * 100 :.4f}")
-            print(f"\n[Answer 1B] The utility of the risk-free asset is: {risk_free_utility * 100 :.4f}")
-            print(f"\n[Answer 1C] The utility of the risk-free asset is: {risk_free_utility01 * 100 :.4f}")
-            print(f"\n[Answer 1E] Leftside: {left_side:.4f}")
-            print(f"\n[Answer 1D] The value of A is approximately:-- [THE MAXIMUM RISK AVERSION FOR RISK PORTFLIO] \n {A / 10:.4f}")
-
+            print(f"[Answer 1A] The utility of the risky asset is: [u-risky asset]  {risky_utility * 100 :.4f}")
+            print(f"[Answer 1B] The utility of the risk-free asset is [u-Tbill] : {risk_free_utility :.3f}")
+            print(f"[Answer 1C] The value of A is approximately:-- [A] {A / 10:.4f}")
 
 
         except Exception as e:
@@ -1949,9 +1964,23 @@ def main():
         print(f"\n[ANSWER]\nStandard Deviation of Portfolio on CAL (σ_p): {sigma_p_input:.2f}%")
         print(f"\n[ANSWER]\nExpected Return of Portfolio on CAL (E[R_p]): {E_Rp * 100:.2f}%")
 
+    if choice == '27':
+        print("\n\n[CHAPTER - 6 Problem 6] Find the expected return for given utility level and plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.\n")
+        try:
+            utility_level = float(input("Enter the utility level (float): "))
+            risk_aversion = float(input("Enter the risk aversion (float): "))
+
+            expected_return = calculate_expected_return(utility_level, risk_aversion)
+
+
+            print(f"\n\n[ANSWER] The expected return for the indifference curve is: {expected_return:.4f}")
+
+        except Exception as e:
+            print(e)
+            print(traceback.print_exc())
+
 if __name__ == '__main__':
     main()
-
 
 
 
