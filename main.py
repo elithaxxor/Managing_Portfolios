@@ -534,7 +534,9 @@ def calculate_max_fee(risky_return, risk_free_rate, risky_std_dev, passive_retur
     max_fee = (sharpe_ratio - sharpe_passive) / sharpe_ratio
     print("\nmax_fee: ", max_fee, "sharpe_ratio: ", sharpe_ratio, "sharpe_passive: ", sharpe_passive)
     return max_fee
-############################
+
+############################################################################################################
+
 ''' QUESTION 4: '''
 
 def calculate_present_value(expected_cash_flow, required_return):
@@ -549,7 +551,8 @@ def calculate_expected_rate_of_return(expected_cash_flow, purchase_price):
     return (expected_cash_flow / purchase_price) - 1
 
 
-######################
+######################################################################################################
+
 ''' QUESTION 5 - Calculate the maximum level of risk aversion (A) for which the risky portfolio is still preferred to T-bills. '''
 def calculate_max_risk_aversion(risky_return, risk_free_rate, risky_std_dev):
     return 2 * (risky_return - risk_free_rate) / (risky_std_dev ** 2)
@@ -563,7 +566,9 @@ def expected_return_for_indifference_curve(U, A, std_dev):
     expected_return = U + A * std_dev
     print("expected_return: ", expected_return)
     return U + A * std_dev
-##########################
+
+##########################################################################################################
+
 
 ''' [CHAPTER 5- QUESTION 1] Calculate the EAR, Quarterly APR, and monthly APR [ when given a principal, time horizon and interest rate.'''
 # Function to calculate future value with Effective Annual Rate (EAR)
@@ -589,7 +594,9 @@ def calculate_monthly_apr(principal, annual_rate, years):
 
 
 
-######################
+######################################################################################################
+
+
 ''' [CHAPTER 5- QUESTION 2] Calculate Effective Annual Rate (Annually, Monthly, Weekly, daily and contiously) when given a FIXED APR .'''
 
 # Function to calculate EAR for discrete compounding
@@ -602,7 +609,9 @@ def calculate_ear_continuous(apr):
     return ear
 
 
-######################
+######################################################################################################
+
+
 '''' [CHAPTER 5- QUESTION 3] COMPARE TERMINAL VALUES OF TWO INVESTMENTS when Given:'''
 
 # Function to calculate future value with compound interest
@@ -612,7 +621,8 @@ def future_value(principal, annual_rate, years, compounds_per_year):
     fv = principal * (1 + rate_per_period) ** total_periods
     return fv
 
-####################
+####################################################################################################
+
 
 ''' [CHAPTER 5- QUESTION 4] Find the Total return and determine the asset  Which is the safer investment?'''
 # Function to compare investments based on expected inflation rate
@@ -645,7 +655,8 @@ def compare_investments(principal, conventional_rate, inflation_plus_base_rate):
 
 
 
-#########################
+#########################################################################################################
+
 
 
 ''' [CHAPTER 5- QUESTION 9] Calculate the expected return and standard deviation given a set of probabilities of the complete portfolio.'''
@@ -671,7 +682,10 @@ def calculate_expected_return00(rates_of_return, probabilities):
 def calculate_variance00(rates_of_return, probabilities, expected_return):
     variance = sum(p * (r - expected_return) ** 2 for r, p in zip(rates_of_return, probabilities))
     return variance
-#######################
+
+
+#######################################################################################################
+
 
 '''          "\n enter '25'  [CHAPTER - 7II Problem 1A-]  Compute the expected return and variance of an equally weighted portfolio.   \n")
 '''
@@ -717,7 +731,8 @@ def get_covariance_matrix(num_stocks, stock_symbols):
     return covariance_matrix
 
 
-##########################
+##########################################################################################################
+
 
 
 
@@ -733,7 +748,154 @@ def compute_expected_return_CAL(R_f, E_Rm, sigma_m, sigma_p):
     E_Rp = R_f + S * sigma_p
     return E_Rp
 
-####################
+######################################################################################################
+
+
+''' CONCEPT CHECK 7.3 '''
+"""
+
+Parameters:
+    E_Ra (float): Expected return of Asset A (%)
+    E_Rb (float): Expected return of Asset B (%)
+    sigma_a (float): Standard deviation of Asset A (%)
+    sigma_b (float): Standard deviation of Asset B (%)
+    w_a (float): Weight of Asset A in the portfolio (decimal between 0 and 1)
+    rho_ab (float): Correlation coefficient between Asset A and Asset B (between -1 and 1)
+
+Returns:
+dict: A dictionary containing the portfolio's expected return and standard deviation
+"""
+def calculate_portfolio_metrics(E_Ra, E_Rb, sigma_a, sigma_b, w_a, rho_ab):
+
+
+    # Convert percentages to decimals
+    E_Ra /= 100
+    E_Rb /= 100
+    sigma_a /= 100
+    sigma_b /= 100
+
+    # Calculate weight of Asset B
+    w_b = 1 - w_a
+    print("\nweight of A: ", w_a)
+    print("weight of B: ", w_b)
+    print("weighed of A and B: ", w_a + w_b)
+
+    # Calculate the expected return of the portfolio
+    E_Rp = w_a * E_Ra + w_b * E_Rb
+
+
+    # Calculate the variance of the portfolio
+    sigma_p_squared = (w_a * sigma_a) ** 2 + (w_b * sigma_b) ** 2 + 2 * w_a * w_b * sigma_a * sigma_b * rho_ab
+
+
+    # Calculate the standard deviation of the portfolio
+    sigma_p = sigma_p_squared ** 0.5
+
+    # Convert expected return and standard deviation back to percentages
+    E_Rp *= 100
+    sigma_p *= 100
+
+    # Return the results in a dictionary
+    return E_Rp, sigma_p
+
+def calculate_correlation_coefficient(E_Ra, E_Rb, sigma_a, sigma_b, w_a, sigma_p):
+    # Convert percentages to decimals
+    E_Ra /= 100
+    E_Rb /= 100
+    sigma_a /= 100
+    sigma_b /= 100
+    sigma_p /= 100
+
+    # Calculate weights
+    w_b = 1 - w_a
+
+    # Calculate the variance of the portfolio
+    sigma_p_squared = sigma_p ** 2
+
+    # Calculate the weighted variances
+    term_a = (w_a * sigma_a) ** 2
+    term_b = (w_b * sigma_b) ** 2
+
+    # Calculate the denominator
+    denominator = 2 * w_a * w_b * sigma_a * sigma_b
+
+    # Calculate the numerator
+    numerator = sigma_p_squared - term_a - term_b
+
+    # Calculate the correlation coefficient
+    rho_ab = numerator / denominator
+
+    return rho_ab
+
+'''
+    Calculate the optimal risky portfolio (Portfolio P) composed of two risky assets.
+    Parameters:
+    E_Ra (float): Expected return of Asset A (%)
+    E_Rb (float): Expected return of Asset B (%)
+    sigma_a (float): Standard deviation of Asset A (%)
+    sigma_b (float): Standard deviation of Asset B (%)
+    rho_ab (float): Correlation coefficient between Asset A and Asset B (-1 to 1)
+    R_f (float): Risk-free rate (%)
+
+'''
+def calculate_optimal_risky_portfolio(E_Ra, E_Rb, sigma_a, sigma_b, rho_ab, R_f):
+
+    # Convert percentages to decimals
+    E_Ra /= 100
+    E_Rb /= 100
+    sigma_a /= 100
+    sigma_b /= 100
+    R_f /= 100
+
+    # Calculate excess returns
+    excess_return_a = E_Ra - R_f
+    excess_return_b = E_Rb - R_f
+
+    # Excess return vector
+    excess_returns = np.array([excess_return_a, excess_return_b])
+
+    # Covariance between Asset A and Asset B
+    cov_ab = sigma_a * sigma_b * rho_ab
+
+    # Covariance matrix
+    covariance_matrix = np.array([
+        [sigma_a ** 2, cov_ab],
+        [cov_ab, sigma_b ** 2]
+    ])
+
+    # Inverse of covariance matrix
+    inv_covariance_matrix = np.linalg.inv(covariance_matrix)
+
+    # Compute weights
+    numerator = inv_covariance_matrix @ excess_returns
+    denominator = np.ones(2) @ inv_covariance_matrix @ excess_returns
+    weights = numerator / denominator
+
+    # Extract weights
+    w_a = weights[0]
+    w_b = weights[1]
+
+    # Calculate expected return of the optimal risky portfolio
+    E_Rp = w_a * E_Ra + w_b * E_Rb
+
+    # Calculate standard deviation of the optimal risky portfolio
+    sigma_p = np.sqrt(
+        w_a ** 2 * sigma_a ** 2 +
+        w_b ** 2 * sigma_b ** 2 +
+        2 * w_a * w_b * cov_ab
+    )
+
+    # Convert results back to percentages
+    E_Rp *= 100
+    sigma_p *= 100
+
+    # Return the results in a dictionary
+    return w_a, w_b, E_Rp, sigma_p
+
+
+
+################################################################################
+
 def asset_input():
     print("Enter the details for Expectd Return and Standard devation for  A:")
     asset_A = get_asset_input("Asset A")
@@ -756,7 +918,7 @@ def main():
     global correlation_coef, user_expected_returns, user_probabilities, covariance_AB, user_expected_returns, user_expected_returns, asset_A, asset_B, t_bills
     label: choices
     print("\nWelcome to the Portfolio Optimization Tool!\n "
-          "\n3enter '1' if you like to calculate the optimal portfolio weights for assets A and B, and the expected return "
+          "\n3 enter '1'[CHAPTER 7.3 A]  if you like to calculate the optimal portfolio weights for assets A and B, and the expected return "
           "and standard deviation of the optimal portfolio?"
           "\n enter '2' [CHAPTER - 6 Problem 16] Calculate CALs slope, and draw grapsh "
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
@@ -796,7 +958,7 @@ def main():
 
 
     if choice == '1':
-        print("[Problem 16] plot and calculate the optimal portfolio weights for assets A and B, and the expected return and standard deviation of the optimal portfolio")
+        print("[CONCEPT CHECK 7.3] Calculate expected return of a portofio with given [CORRELATION COEFICIANT weights and returns of assets")
         try:
             # Get input for Asset A, Asset B, and T-bills
             print("Enter the details for Expectd Return and Standard devation for  A:")
@@ -809,12 +971,83 @@ def main():
             print("\nEnter the details for Expectd Return and Standard devation for T-bills:")
 
             t_bills = get_asset_input("T-bills")
-            print("asset a input: " , t_bills)
+            print("\nasset a input: " , t_bills)
 
-            print("**************************\nasset A input: \n Standard Deviation: ", asset_A.std_deviation, "Expected Return: ", asset_A.expected_return,
-                  "\nasset B input: \n Standard Deviation: ", asset_B.std_deviation, "Expected Return: ", asset_B.expected_return,
-                  "\n input: \n Standard Deviation: ", t_bills.std_deviation, "Expected Return: ", t_bills.expected_return, "\n**************************")
+            correlation_coef = float(input("\nEnter the correlation coefficient between the two assets: "))
 
+            asset_weight_A = asset_A.expected_return - t_bills.expected_return
+            asset_weight_B = asset_B.expected_return - t_bills.expected_return
+            portfolio_weight = 1 - asset_weight_A - asset_weight_B
+            coveraince_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
+
+            print("**************************\nasset A input: \n Standard Deviation: ", asset_A.std_deviation,
+                  "Expected Return: ", asset_A.expected_return,
+                  "\nasset B input: \n Standard Deviation: ", asset_B.std_deviation, "Expected Return: ",
+                  asset_B.expected_return,
+                  "\nT-bills input: \n Standard Deviation: ", t_bills.std_deviation, "Expected Return: ",
+                  t_bills.expected_return, "\n**************************")
+
+            print("\n\n[ANSWER- PART 1] - Weights of the assets: \n\nasset_weight_A: ", asset_weight_A, "\nasset_weight_B: ", asset_weight_B, "\n\nportfolio_weight: ", portfolio_weight
+                  , "\ncoveraince_AB: ", coveraince_AB * 1000)
+
+
+            ''' 
+                Calculate the expected return of the portfolio --> RETURNS [PORTOFIO EXPECTED RETURN, STANDARD DEVIATION] 
+            '''
+            weighted_asset_A_tbill = asset_weight_A + t_bills.expected_return
+
+            ER = asset_A.expected_return
+            # portfolio_expected_return, portfolio_standard_deviation = calculate_portfolio_metrics(asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
+            #                                                 asset_B.std_deviation, asset_weight_A, correlation_coef)
+
+            portfolio_expected_return, portfolio_standard_deviation = calculate_portfolio_metrics(
+                asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
+                asset_B.std_deviation, weighted_asset_A_tbill, correlation_coef)
+
+            excess_return_a = (asset_A.expected_return - t_bills.expected_return) * 100
+            excess_return_b = (asset_B.expected_return - t_bills.expected_return) * 100
+
+            #  portofio_std_deviation = portfolio_metrics[1]
+            print("\n\nCalculate the expected return of the portfolio P  --> RETURNS [PORTOFIO EXPECTED RETURN, STANDARD DEVIATION]\n\n",
+                  "[ANSWER - PART 2]\n\n"
+                  "[ANSWER- PART 2]\n\n - Expected Return of the Portfolio: ", portfolio_expected_return * 100,
+                  "\nStandard Deviation of the Portfolio: ", portfolio_standard_deviation * 100,
+                  "\n\nExcess Return of Asset A: ", excess_return_a, "\nExcess Return of Asset B: ", excess_return_b)
+
+
+
+            weighed_a02, weighed_b02, optimal_expected_return02, optimal_portfolio_standard_deviation_02 = calculate_optimal_risky_portfolio(asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
+                                              asset_B.std_deviation, correlation_coef, t_bills.expected_return)
+
+            print("\n\n[ANSWER- PART 3] \n- Calculate the optimal portfolio weights for assets A and B\n\n",
+                  "Weight of A in the optimal portfolio: ", weighed_a02,
+                  "\nWeight of B in the optimal portfolio: ", weighed_b02,
+                  "\n\nExpected return of the optimal portfolio: ", optimal_expected_return02 * 100, "%",
+                  "\nstandard deviation of the optimal portfolio: ", optimal_portfolio_standard_deviation_02 * 100, "%\n\n")
+
+
+
+            cal_slope = ((optimal_expected_return02 * 100) - (t_bills.expected_return * 100)) / (optimal_portfolio_standard_deviation_02 * 100)
+           # cal_slope2 = calculate_cal_slope(optimal_expected_return02 * 100, t_bills.expected_return * 100 , optimal_portfolio_standard_deviation_02 * 100)
+
+            print("\n\n[ANSWER- PART 4] - Find the slope CAL supported by T-Bills and Portoflio P \n\n", "CAL Slope: ",
+                  cal_slope, "CAL Slope2: ")
+
+
+
+            #
+            #
+            # '''
+            #     calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation.
+            # '''
+            #
+            # correlation_coefficient = calculate_correlation_coefficient(asset_A.expected_return, asset_B.expected_return, asset_A.std_deviation,
+            #                                                 asset_B.std_deviation, asset_weight_A, portfolio_standard_deviation)
+
+
+            # print("\n\n[ANSWER- PART 3] - Calculate correlation coefficient given the weights and returns of assets and portfilio standard deviation."
+            #       " \nCorrelation Coefficient: ", correlation_coefficient)
+            #
 
 
         except Exception as e:
@@ -822,8 +1055,8 @@ def main():
             print(traceback.print_exc())
             return
             # Plot the opportunity set
-        plot_oppurtunity_set(asset_A, asset_B, t_bills)
-        plot_cal(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+        # plot_oppurtunity_set(asset_A, asset_B, t_bills)
+        # plot_cal(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
 
     # NOTE: OPTION 1-- Calculate the optimal portfolio weights for assets A and B
     if choice == '2':
@@ -831,8 +1064,8 @@ def main():
         try:
             # Calculate the optimal portfolio weights for assets A and B
             print("Calculate the optimal portfolio weights for assets A and B\nEnter the correlation coefeciant for the funds s:")
-            global correlation_coef, user_expected_returns, user_probabilities
-            global covariance_AB
+          #  global correlation_coef, user_expected_returns, user_probabilities
+           # global covariance_AB
             # correlation_coef = float(input("Enter the correlation coefeciant for the funds s: "))
             # covariance_AB = correlation_coef * asset_A.std_deviation * asset_B.std_deviation
             #
@@ -1140,7 +1373,7 @@ def main():
             print(traceback.print_exc())
 
     if choice == '10':
-        print("\n\n[Question 18] You have chosen to calculate the investment proportion, expected return, and standard deviation of the complete portfolio")
+        print("\n\n[CHAPTER 6 Question 18] You have chosen to calculate the investment proportion, expected return, and standard deviation of the complete portfolio")
         try:
             print("\n")
             max_std_dev_given = float(input("Enter the maximum standard deviation for the complete portfolio: "))
@@ -1655,10 +1888,14 @@ def main():
             # Compute the standard deviation of the portfolio
             portfolio_std_dev = np.sqrt(portfolio_variance)
 
+            # variance_X = np.var(expected_returns, ddof=1)
+            # portfolio_expected = np.var(portfolio_expected_return, ddof=1)
+
             # Display the results
             print("\n[ANSWER]\n Equally Weighted Portfolio Results:")
-            print(f"\n[ANSWER]\nExpected Return: {portfolio_expected_return * 100:.2f}%")
-            print(f"\n[ANSWER]\nVariance: {portfolio_variance:.5f}")
+            print(f"\n[ANSWER]\nExpectted Returns: {expected_returns:.5f}")
+            print(f"\n[ANSWER]\nPortfolio Variance: {portfolio_variance:.5f}")
+            print(f"\n[ANSWER]\nPortfolio Expected Return: {portfolio_expected_return * 100:.2f}%")
             print(f"\n[ANSWER]\nStandard Deviation: {portfolio_std_dev * 100:.2f}%")
 
         except Exception as e:
