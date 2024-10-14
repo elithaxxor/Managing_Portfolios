@@ -940,13 +940,13 @@ def main():
           "\n enter '3' if you like to calculate the expected return of a portfolio with given weights and returns of assets"
           "\n enter '4' [CHAPTER 7- Probelem 15] Calculate the expected return and standard deviation of a portfolio with given weights and returns of assets"
           "\n enter '5' to calculate e expected value and standard and deviation of the rate of return on his portfolio"
-          "\n enter '6' [CHAPTER - 6 Problem 13- CHAPTER 6] to calculate the Expected rate of return, given 1 asset and Risk free asset "
+          "\n enter '6' [CHAPTER 6 - QUESTION 13 and QUESTION 15 and QUESTION 16] to calculate the Expected rate of return, given 1 asset and Risk free asset "
           "\n enter '7' [CHAPTER - 6 Problem 14 - CHAPTER 6]] Calculate investment proportions of your client's overall portfolio, including the position in T-bills?"
           "\n enter '8' [CHAPTER - 6 Problem 15] What is the reward-to-volatility ratio (S) of the optimal risky portfolio?"
           "\n enter '9' [CHAPTER - 6 Problem 17] Find 'Y', the proportion of the risky portfolio given a specefic rate of return to  complete portfolio"
           "\n enter '10' [CHAPTER - 6 Problem 18] Calclate the investment proportion, expected return, and standard deviation of the complete portfolio"
             "\n enter '11' [CHAPTER - 6 Problem 28A] [Reward-to-volatility ratio ](Sharpe ratio) of the optimal risky portfolio\n"
-          "\n enter '12' [CHAPTER - 6 Problem 28B] mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
+          "\n enter '12' [Chapter 6 - Problem 28B]  mum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year\n"
           "\n enter '13' [Problem 4] [Calculate Present Value and Expected rate of return] To determine how much you are willing to pay for the risky portfolio, \n"
           "we can [calculate the present value (fair price)] of the portfolio based on the required risk premium and the risk-free rate.\n"
           "\n enter '14'  [CHAPTER - 6 Problem 5-  Calculate the: \n [maximum level of risk aversion] (A) for which the risky portfolio is still preferred to T-bills. \n"
@@ -1260,7 +1260,7 @@ def main():
                 print(traceback.print_exc())
 
     if choice == '6':
-        print("\n[CHAPTER 6 - QUESTION 13] You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
+        print("\n[CHAPTER 6 - QUESTION 13 and QUESTION 15 and 16] You have chosen to calculate the Expected rate of return, given 1 asset and Risk free asset")
         try:
           #  asset_A, asset_B, t_bills = asset_input()
             asset_A = get_asset_input("Asset A")
@@ -1270,22 +1270,60 @@ def main():
 
             expected_value = calculate_expected_value(t_bills, weight)
             std_deviation = calculate_standard_deviation(t_bills, asset_A, weight)
+            reward_to_volatility_ratio = (asset_A.expected_return - t_bills.expected_return) / asset_A.std_deviation
+            cal_slope = t_bills.expected_return + reward_to_volatility_ratio * asset_A.std_deviation
 
-            print("\n[ANSWER] \n The expected value of the rate of return on his portfolio is:", expected_value)
-            print("\n[ANSWER] \n The standard deviation of the rate of return on his portfolio is:", std_deviation)
 
+
+            print("\n[ANSWER - Question 13] \n The (potential return expected value of the rate of return on his portfolio is:\n E(Rc): ", expected_value * 100, "%")
+            print("\n[ANSWER- Question 13] \n Expected Return n of the rate of return on his portfolio is:\n , [σ]", std_deviation * 100, "%")
+            print("\n[ANSWER- Question 15] \n The reward-to-volatility ratio (S) of the optimal risky portfolio is:\n [S] ", reward_to_volatility_ratio)
+            print("\n[ANSWER- Question 16] \n The slope of the CAL is:\n [S] ", cal_slope)
+
+            print("\n\n[PROBLEM- Question 17A] \n Suppose client chooses to invest in propertion Y, so they will have a given expected rate of return: ")
+            new_expected_rate_return = float(input("\nEnter the expected rate of return for the client's portfolio: "))
+
+            numerator = new_expected_rate_return - t_bills.expected_return
+            denominator = asset_A.expected_return - t_bills.expected_return
+
+            proportion_y = numerator / denominator
+            proportion_t_bills = 1 - proportion_y
+            print("\n\n[ANSWER- Question 17A] \n The proportion of the risky portfolio to the complete portfolio is: \n[Y]", proportion_y * 100, "%")
+
+            print("\n\n[ANSWER- Question 17B] \n Suppose client invests in fund propoostin Y, find expected rate of return so standard deviation does not exceed a certail value")
+
+            max_std_deviation = float(input("\nEnter the maximum standard deviation for the client's portfolio: "))
+            new_y =  max_std_deviation / asset_A.std_deviation # Calculate the new proportion of the risky portfolio
+            new_expected_rate_return = t_bills.expected_return + new_y * (asset_A.expected_return - t_bills.expected_return)
+
+            print("\n\n[ANSWER- Question 18A] \n The new Y value is: : \n [Y]", new_y)
+            print("\n\n[ANSWER- Question 18B] \n The expected rate of return for the client's portfolio is: \n", new_expected_rate_return * 100, "%")
+            
+            print("\n\n[ANSWER- Question 28A] \n The standard deviation of the client's portfolio is: \n", max_std_deviation * 100, "%")
+          
+            
+            passive_yield = float(input("Enter the expected return of the passive investment: "))
+            passive_std = float(input("Enter the standard deviation of the passive investment: "))
+    
+            # Calculate Sharpe ratios [Passive and active
+            sharpe_active = calculate_sharpe_ratio(asset_A.expected_return, t_bills.expected_return, asset_A.std_deviation)
+            sharpe_passive = calculate_sharpe_ratio(passive_yield, t_bills.expected_return, passive_std)
+    
+            print(f"Sharpe Ratio of Active Portfolio: {sharpe_active:.4f}")
+            print(f"Sharpe Ratio of Passive Portfolio: {sharpe_passive:.4f}")
+            
         except ValueError as e:
             print(e)
             print(traceback.print_exc())
 
     if choice == '7':
-        print("\n\n[CHAPTER 6 - Question 14]You have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
+        print("\n\n[CHAPTER 6 - Question 14] You have chosen to calculate the investment proportions of your client's overall portfolio, including the position in T-bills")
         try:
 
             # asset_A = get_asset_input("Asset A")
             # asset_B = get_asset_input("Asset B")
             # t_bills = get_asset_input("T-bills")
-            client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%)\n [REFER TO CHOICE:6 FOR CLIENT WEIGHT]: "))
+            client_weight_in_risky = float(input("Enter the client's weight in the risky portfolio (e.g., 0.70 for 70%)\n enter `1` if all assets add up to 100%: "))
             proportion_stock_A = float(input("Enter the proportion of Stock A (e.g., 0.40 for 40%): "))
             proportion_stock_B = float(input("Enter the proportion of Stock B (e.g., 0.30 for 30%): "))
             proportion_stock_C = float(input("Enter the proportion of Stock C (e.g., 0.30 for 30%): "))
@@ -1303,8 +1341,8 @@ def main():
             print("\nClient's Weight in Risky Portfolio: ", client_weight_in_risky)
 
 
-            print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: ", client_investment_A * 100, "\nClient's Investment in Stock B: ", client_investment_B * 100, "\nClient's Investment in Stock C: \n", client_investment_C * 100,
-                  "\nClient's Investment in T-bills: ", client_investment_t_bills * 100)
+            print("\n\n[ANSWER- Question 14]\nClient's Investment in Stock A: [Wa] ", client_investment_A * 100, "%\nClient's Investment in Stock B: [Wb] ", client_investment_B * 100, "%\nClient's Investment in Stock C: [Wc] %", client_investment_C * 100,
+                  "\nClient's Investment in T-bills: [Wf]", client_investment_t_bills * 100)
 
             # Calculate the expected return of the client's portfolio
 
@@ -1405,9 +1443,9 @@ def main():
             print(e)
             print(traceback.print_exc())
 
-    ''' Question 28A Calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio-- PASSIVE / ACTIVE '''
+    ''' CHAPTER Question 28A Calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio-- PASSIVE / ACTIVE '''
     if choice == '11':
-        print("\n\n[Question 28A] You have chosen to calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio")
+        print("\n\n[CHAPTER 6 - Question 28A] You have chosen to calculate the reward-to-volatility ratio (Sharpe ratio) of the optimal risky portfolio")
         try:
             print("\n")
             asset_A = get_asset_input("Asset A")
@@ -1428,9 +1466,9 @@ def main():
             print(traceback.print_exc())
 
 
-    '''[Problem 28B] Calculate the maximum fee that can be charged such that the investor's Sharpe ratio is at least equal to that of the passive portfolio.'''
+    '''[Chapter 6 - Problem 28B] Calculate the maximum fee that can be charged such that the investor's Sharpe ratio is at least equal to that of the passive portfolio.'''
     if choice == '12':
-        print("\n\n[Question 28B] You have chosen to calculate the maximum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year)")
+        print("\n\n[Chapter 6 - Problem 28B] You have chosen to calculate the maximum fee you could charge (as a percentage of the investment in your fund, deducted at the end of the year)")
         print("    Calculate the maximum fee that can be charged such that the investor's Sharpe ratio is at least equal to that of the passive portfolio.")
         try:
             print("\n")
@@ -1967,13 +2005,28 @@ def main():
     if choice == '27':
         print("\n\n[CHAPTER - 6 Problem 6] Find the expected return for given utility level and plot the indifference curve by calculating the expected return r_P for different values of σ_P (the standard deviation) and plot r_P against σ_P.\n")
         try:
-            utility_level = float(input("Enter the utility level (float): "))
-            risk_aversion = float(input("Enter the risk aversion (float): "))
+            utility_level = float(input("Enter the utility level (float): [U] "))
+            risk_aversion = float(input("Enter the risk aversion (float): [A] "))
+            sigma = float(input("Enter the standard deviation (float): [σ]  "))
 
-            expected_return = calculate_expected_return(utility_level, risk_aversion)
+            expected_return01 = utility_level + (0.5 * (risk_aversion * sigma ** 2))
+
+            print(f"\n\n[ANSWER] \nExpected Return for σ = 0.1: \n{expected_return01:.4f}")
+                  # f"\nExpected Return for σ = 0.5: {expected_return02:.4f}"
+                  # f"\nExpected Return for σ = 1.0: {expected_return03:.4f}")
 
 
-            print(f"\n\n[ANSWER] The expected return for the indifference curve is: {expected_return:.4f}")
+            # Plot the indifference curve
+            plt.figure(figsize=(8, 6))
+            plt.plot(sigma, expected_return01, label=f'Utility Level = {utility_level}, Risk Aversion = {risk_aversion}')
+
+            plt.xlabel('Standard Deviation (σ)')
+            plt.ylabel('Expected Return (E[R])')
+            plt.title('Indifference Curve in Expected Return vs. Standard Deviation Plane')
+            plt.legend()
+            plt.grid(True)
+            plt.show()
+
 
         except Exception as e:
             print(e)
